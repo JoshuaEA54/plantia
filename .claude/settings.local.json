@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd /c \"mkdir \"\"C:\\\\Users\\\\Usuario\\\\Documents\\\\UNA\\\\2026\\\\Semestre-1\\\\moviles\\\\Plantia\\\\plantia\\\\app\\\\\\(app\\)\\\\\\(tabs\\)\"\"\")"
+    ]
+  }
+}
