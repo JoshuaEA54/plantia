@@ -5,8 +5,8 @@ const createUserStatsStyle = (theme: AppTheme) => {
   return StyleSheet.create({
     statsCard: {
       backgroundColor: theme.colors.white,
-      marginHorizontal: 16,
-      marginTop: 16,
+      marginHorizontal: theme.spacing.lg,
+      marginTop: theme.spacing.lg,
       borderRadius: 14,
       flexDirection: 'row',
       paddingVertical: 14,
@@ -24,7 +24,7 @@ const createUserStatsStyle = (theme: AppTheme) => {
     statDivider: {
       width: 0.8,
       backgroundColor: theme.colors.border,
-      marginVertical: 8,
+      marginVertical: theme.spacing.sm,
     },
     statNumber: {
       fontSize: 22,
@@ -35,7 +35,7 @@ const createUserStatsStyle = (theme: AppTheme) => {
     statLabel: {
       fontSize: 11,
       color: theme.colors.textSecondary,
-      marginTop: 4,
+      marginTop: theme.spacing.xs,
     },
   });
 };
