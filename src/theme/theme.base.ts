@@ -1,4 +1,5 @@
 // Este archivo contiene los tipos, interfaces y valores compartidos del tema
+import { fontFamily, fontSize } from './fonts';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -36,6 +37,8 @@ export interface AppTheme {
   colors: ThemeColors;
   spacing: ThemeSpacing;
   radius: ThemeRadius;
+  fontFamily: typeof fontFamily;
+  fontSize: typeof fontSize;
 }
 
 // Regla del 4 para los spaciados: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64
@@ -55,3 +58,5 @@ export const sharedRadius: ThemeRadius = {
   xl: 28,
   full: 999,
 };
+
+export { fontFamily, fontSize };

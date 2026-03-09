@@ -11,8 +11,8 @@ const createPlantsListStyle = (theme: AppTheme) => {
       marginBottom: 10,
     },
     sectionTitle: {
-      fontSize: 13,
-      fontWeight: '600',
+      fontSize: theme.fontSize.overline,
+      fontFamily: theme.fontFamily.semiBold,
       color: theme.colors.textSecondary,
       letterSpacing: 0.52,
       textTransform: 'uppercase',
@@ -25,8 +25,8 @@ const createPlantsListStyle = (theme: AppTheme) => {
       marginLeft: theme.spacing.sm,
     },
     countText: {
-      fontSize: 11,
-      fontWeight: '600',
+      fontSize: theme.fontSize.label,
+      fontFamily: theme.fontFamily.semiBold,
       color: theme.colors.primary,
     },
     spacer: {
@@ -38,8 +38,8 @@ const createPlantsListStyle = (theme: AppTheme) => {
       gap: 2,
     },
     verTodasText: {
-      fontSize: 12,
-      fontWeight: '500',
+      fontSize: theme.fontSize.bodySmall,
+      fontFamily: theme.fontFamily.medium,
       color: theme.colors.primary,
     },
     plantsGrid: {

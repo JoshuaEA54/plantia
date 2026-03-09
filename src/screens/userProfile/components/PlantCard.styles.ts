@@ -26,13 +26,14 @@ const createPlantCardStyle = (theme: AppTheme) => {
       paddingBottom: theme.spacing.md,
     },
     plantName: {
-      fontSize: 12,
-      fontWeight: '600',
+      fontSize: theme.fontSize.bodySmall,
+      fontFamily: theme.fontFamily.semiBold,
       color: theme.colors.textPrimary,
       marginBottom: theme.spacing.xs,
     },
     plantStatus: {
-      fontSize: 10,
+      fontSize: theme.fontSize.caption,
+      fontFamily: theme.fontFamily.regular,
       color: theme.colors.textSecondary,
     },
   });

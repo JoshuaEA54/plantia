@@ -17,7 +17,8 @@ const createTabLayoutStyle = (theme: AppTheme) =>
       elevation: 10,
     },
     tabBarLabel: {
-      fontSize: 10,
+      fontSize: theme.fontSize.caption,
+      fontFamily: theme.fontFamily.medium,
     },
   });
 

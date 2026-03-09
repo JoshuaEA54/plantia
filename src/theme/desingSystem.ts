@@ -1,5 +1,5 @@
 import { ColorSchemeName, useColorScheme } from 'react-native';
-import { AppTheme, ThemeMode, sharedSpacing, sharedRadius } from './theme.base';
+import { AppTheme, ThemeMode, sharedSpacing, sharedRadius, fontFamily, fontSize } from './theme.base';
 import { lightColors } from './light';
 import { darkColors } from './dark';
 
@@ -9,12 +9,16 @@ const themes: Record<ThemeMode, AppTheme> = {
     colors: lightColors,
     spacing: sharedSpacing,
     radius: sharedRadius,
+    fontFamily,
+    fontSize,
   },
   dark: {
     mode: 'dark',
     colors: darkColors,
     spacing: sharedSpacing,
     radius: sharedRadius,
+    fontFamily,
+    fontSize,
   },
 };
 
