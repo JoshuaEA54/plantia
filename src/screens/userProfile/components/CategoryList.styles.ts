@@ -9,8 +9,8 @@ const createCategoryListStyle = (theme: AppTheme) => {
       marginBottom: 10,
     },
     sectionTitle: {
-      fontSize: 13,
-      fontWeight: '600',
+      fontSize: theme.fontSize.overline,
+      fontFamily: theme.fontFamily.semiBold,
       color: theme.colors.textSecondary,
       letterSpacing: 0.52,
       textTransform: 'uppercase',
@@ -36,8 +36,8 @@ const createCategoryListStyle = (theme: AppTheme) => {
       fontSize: 13,
     },
     categoryName: {
-      fontSize: 12,
-      fontWeight: '500',
+      fontSize: theme.fontSize.bodySmall,
+      fontFamily: theme.fontFamily.medium,
       color: theme.colors.primaryDark,
     },
   });
