@@ -6,7 +6,7 @@ const createPlantsListStyle = (theme: AppTheme) => {
     plantsHeader: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginHorizontal: 16,
+      marginHorizontal: theme.spacing.lg,
       marginTop: 20,
       marginBottom: 10,
     },
@@ -22,7 +22,7 @@ const createPlantsListStyle = (theme: AppTheme) => {
       borderRadius: 8,
       paddingHorizontal: 7,
       paddingVertical: 1,
-      marginLeft: 8,
+      marginLeft: theme.spacing.sm,
     },
     countText: {
       fontSize: 11,
@@ -45,8 +45,8 @@ const createPlantsListStyle = (theme: AppTheme) => {
     plantsGrid: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      marginHorizontal: 16,
-      gap: 12,
+      marginHorizontal: theme.spacing.lg,
+      gap: theme.spacing.md,
     },
   });
 };

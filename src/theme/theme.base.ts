@@ -20,6 +20,7 @@ export interface ThemeSpacing {
   md: number;
   lg: number;
   xl: number;
+  xxl: number;
 }
 
 export interface ThemeRadius {
@@ -42,8 +43,9 @@ export const sharedSpacing: ThemeSpacing = {
   xs: 4,
   sm: 8,
   md: 12,
-  lg: 18,
+  lg: 16,
   xl: 24,
+  xxl: 32,
 };
 
 export const sharedRadius: ThemeRadius = {
