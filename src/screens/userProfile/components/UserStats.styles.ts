@@ -27,13 +27,14 @@ const createUserStatsStyle = (theme: AppTheme) => {
       marginVertical: theme.spacing.sm,
     },
     statNumber: {
-      fontSize: 22,
-      fontWeight: '700',
+      fontSize: theme.fontSize.display,
+      fontFamily: theme.fontFamily.bold,
       color: theme.colors.textPrimary,
       lineHeight: 26,
     },
     statLabel: {
-      fontSize: 11,
+      fontSize: theme.fontSize.label,
+      fontFamily: theme.fontFamily.regular,
       color: theme.colors.textSecondary,
       marginTop: theme.spacing.xs,
     },

@@ -61,20 +61,22 @@ const createProfileHeaderStyle = (theme: AppTheme) => {
       elevation: 3,
     },
     userName: {
-      fontSize: 22,
-      fontWeight: '700',
+      fontSize: theme.fontSize.display,
+      fontFamily: theme.fontFamily.bold,
       color: theme.colors.white,
       marginBottom: theme.spacing.xs,
       textAlign: 'center',
     },
     userHandle: {
-      fontSize: 14,
+      fontSize: theme.fontSize.body,
+      fontFamily: theme.fontFamily.medium,
       color: theme.colors.primaryLight,
       marginBottom: theme.spacing.sm,
       textAlign: 'center',
     },
     userBio: {
-      fontSize: 12,
+      fontSize: theme.fontSize.bodySmall,
+      fontFamily: theme.fontFamily.regular,
       color: 'rgba(255,255,255,0.82)',
       textAlign: 'center',
       lineHeight: 19,
@@ -87,7 +89,8 @@ const createProfileHeaderStyle = (theme: AppTheme) => {
       gap: 6,
     },
     birthdateText: {
-      fontSize: 11,
+      fontSize: theme.fontSize.label,
+      fontFamily: theme.fontFamily.regular,
       color: 'rgba(255,255,255,0.7)',
     },
   });
