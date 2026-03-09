@@ -23,7 +23,7 @@ export default function ProfileHeader({ user, topInset }: ProfileHeaderProps) {
           <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
         </View>
         <TouchableOpacity style={styles.editAvatarButton}>
-          <Ionicons name="camera" size={11} color={theme.colors.primary} />
+          <Ionicons name="camera" size={18} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
 

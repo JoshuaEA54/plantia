@@ -5,14 +5,14 @@ const createProfileHeaderStyle = (theme: AppTheme) => {
   return StyleSheet.create({
     header: {
       backgroundColor: theme.colors.primary,
-      paddingBottom: 32,
+      paddingBottom: theme.spacing.xxl,
       alignItems: 'center',
-      paddingHorizontal: 16,
+      paddingHorizontal: theme.spacing.lg,
     },
     settingsButton: {
       position: 'absolute',
       top: 52,
-      right: 16,
+      right: theme.spacing.lg,
       width: 34,
       height: 34,
       borderRadius: 17,
@@ -22,7 +22,7 @@ const createProfileHeaderStyle = (theme: AppTheme) => {
     },
     avatarWrapper: {
       marginTop: 48,
-      marginBottom: 12,
+      marginBottom: theme.spacing.md,
       width: 84,
       height: 84,
     },
@@ -48,8 +48,8 @@ const createProfileHeaderStyle = (theme: AppTheme) => {
       position: 'absolute',
       bottom: 0,
       right: 0,
-      width: 22,
-      height: 22,
+      width: 26,
+      height: 26,
       borderRadius: 11,
       backgroundColor: theme.colors.white,
       alignItems: 'center',
@@ -64,13 +64,13 @@ const createProfileHeaderStyle = (theme: AppTheme) => {
       fontSize: 22,
       fontWeight: '700',
       color: theme.colors.white,
-      marginBottom: 4,
+      marginBottom: theme.spacing.xs,
       textAlign: 'center',
     },
     userHandle: {
       fontSize: 14,
       color: theme.colors.primaryLight,
-      marginBottom: 8,
+      marginBottom: theme.spacing.sm,
       textAlign: 'center',
     },
     userBio: {
@@ -79,7 +79,7 @@ const createProfileHeaderStyle = (theme: AppTheme) => {
       textAlign: 'center',
       lineHeight: 19,
       maxWidth: 254,
-      marginBottom: 12,
+      marginBottom: theme.spacing.md,
     },
     birthdateRow: {
       flexDirection: 'row',

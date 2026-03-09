@@ -4,7 +4,7 @@ import { AppTheme, createThemedStyles } from '@/src/theme/desingSystem';
 const createCategoryListStyle = (theme: AppTheme) => {
   return StyleSheet.create({
     sectionLabel: {
-      marginHorizontal: 16,
+      marginHorizontal: theme.spacing.lg,
       marginTop: 20,
       marginBottom: 10,
     },
@@ -16,11 +16,11 @@ const createCategoryListStyle = (theme: AppTheme) => {
       textTransform: 'uppercase',
     },
     categoriesScroll: {
-      marginTop: 8,
+      marginTop: theme.spacing.sm,
     },
     categoriesContent: {
-      paddingHorizontal: 16,
-      gap: 8,
+      paddingHorizontal: theme.spacing.lg,
+      gap: theme.spacing.sm,
       flexDirection: 'row',
     },
     categoryChip: {
