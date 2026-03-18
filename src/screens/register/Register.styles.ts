@@ -3,11 +3,10 @@ import { AppTheme, createThemedStyles } from '@/src/theme/desingSystem';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const HERO_HEIGHT = 280;
-
 const ERROR_COLOR = '#d32f2f';
 
-const createRegisterStyles = (theme: AppTheme) =>
-  StyleSheet.create({
+const createRegisterStyle = (theme: AppTheme) => {
+  return StyleSheet.create({
     keyboardAvoid: {
       flex: 1,
       backgroundColor: theme.colors.white,
@@ -16,7 +15,7 @@ const createRegisterStyles = (theme: AppTheme) =>
       flexGrow: 1,
     },
     hero: {
-      minHeight: 280,
+      minHeight: HERO_HEIGHT,
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -153,5 +152,6 @@ const createRegisterStyles = (theme: AppTheme) =>
       color: theme.colors.white,
     },
   });
+};
 
-export const useRegisterStyles = createThemedStyles(createRegisterStyles);
+export const useRegisterTheme = createThemedStyles(createRegisterStyle);

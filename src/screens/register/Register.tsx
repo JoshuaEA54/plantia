@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useRegisterStyles } from './Register.styles';
+import { useRegisterTheme } from './Register.styles';
 
 export default function RegisterScreen() {
-  const { theme, styles } = useRegisterStyles();
+  const { theme, styles } = useRegisterTheme();
   const router = useRouter();
 
   const [name, setName] = useState('');
