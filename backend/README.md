@@ -32,7 +32,7 @@ CORS_ORIGINS=http://localhost:8081,http://localhost:19006
 El proyecto usa el `.venv` ubicado en la raíz de `plantia/`. Desde ahí:
 
 ```powershell
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Ejecutar
