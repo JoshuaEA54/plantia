@@ -1,0 +1,268 @@
+{
+  "collections": {
+    "users": [
+      {
+        "id": "user_1",
+        "fullName": "Sofía Martínez",
+        "username": "@sofia.verde",
+        "email": "sofia@email.com",
+        "passwordHash": "hashed_password",
+        "bio": "Amante de las plantas 🌿 Coleccionando verde desde 2019. Identifico plantas con IA cada día ✨",
+        "birthdate": "1997-03-12",
+        "photoURL": "https://example.com/avatars/sofia.jpg",
+        "stats": {
+          "plantsCount": 47,
+          "streakDays": 21
+        },
+        "acceptedTerms": true,
+        "createdAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+
+    "plants": [
+      {
+        "id": "plant_1",
+        "name": "Monstera Deliciosa",
+        "family": "Araceae",
+        "habitat": "Tropical",
+        "categoryId": "category_3",
+        "imageUrl": "https://example.com/plants/monstera.jpg",
+        "description": "Conocida como 'la costilla de Adán', purifica el aire y crece con poca luz."
+      },
+      {
+        "id": "plant_2",
+        "name": "Cactus Saguaro",
+        "family": "Cactaceae",
+        "habitat": "Desértico",
+        "categoryId": "category_1",
+        "imageUrl": "https://example.com/plants/cactus.jpg",
+        "description": "Puede crecer hasta 6 metros de altura. Nativo de los Andes."
+      },
+      {
+        "id": "plant_3",
+        "name": "Orquídea Phalaenopsis",
+        "family": "Orchidaceae",
+        "habitat": "Tropical",
+        "categoryId": "category_2",
+        "imageUrl": "https://example.com/plants/orquidea.jpg",
+        "description": "Una de las orquídeas más populares. Florece varias veces al año."
+      },
+      {
+        "id": "plant_4",
+        "name": "Helecho Boston",
+        "family": "Nephrolepis",
+        "habitat": "Húmedo",
+        "categoryId": "category_3",
+        "imageUrl": "https://example.com/plants/helecho.jpg",
+        "description": "Ideal para interiores con humedad. Purifica el aire eficazmente."
+      },
+      {
+        "id": "plant_5",
+        "name": "Espatifilo",
+        "family": "Araceae",
+        "habitat": "Tropical",
+        "categoryId": "category_6",
+        "imageUrl": "https://example.com/plants/espatifilo.jpg",
+        "description": "Crece en sombra y tolera el riego irregular. Muy resistente."
+      },
+      {
+        "id": "plant_6",
+        "name": "Pothos Dorado",
+        "family": "Epipremnum",
+        "habitat": "Tropical",
+        "categoryId": "category_6",
+        "imageUrl": "https://example.com/plants/pothos.jpg",
+        "description": "Planta trepadora de fácil cuidado. Ideal para principiantes."
+      }
+    ],
+
+    "user_plants": [
+      {
+        "id": "up_user1_plant1",
+        "userId": "user_1",
+        "plantId": "plant_1",
+        "photoUrl": "https://example.com/user-plants/sofia_monstera.jpg",
+        "status": "healthy",
+        "addedAt": "2024-02-01T08:00:00Z"
+      },
+      {
+        "id": "up_user1_plant2",
+        "userId": "user_1",
+        "plantId": "plant_2",
+        "photoUrl": "https://example.com/user-plants/sofia_cactus.jpg",
+        "status": "healthy",
+        "addedAt": "2024-02-03T09:15:00Z"
+      },
+      {
+        "id": "up_user1_plant3",
+        "userId": "user_1",
+        "plantId": "plant_3",
+        "photoUrl": "https://example.com/user-plants/sofia_orquidea.jpg",
+        "status": "healthy",
+        "addedAt": "2024-02-10T11:00:00Z"
+      },
+      {
+        "id": "up_user1_plant4",
+        "userId": "user_1",
+        "plantId": "plant_4",
+        "photoUrl": "https://example.com/user-plants/sofia_helecho.jpg",
+        "status": "healthy",
+        "addedAt": "2024-02-15T14:30:00Z"
+      },
+      {
+        "id": "up_user1_plant5",
+        "userId": "user_1",
+        "plantId": "plant_5",
+        "photoUrl": "https://example.com/user-plants/sofia_espatifilo.jpg",
+        "status": "healthy",
+        "addedAt": "2024-02-20T16:00:00Z"
+      },
+      {
+        "id": "up_user1_plant6",
+        "userId": "user_1",
+        "plantId": "plant_6",
+        "photoUrl": "https://example.com/user-plants/sofia_pothos.jpg",
+        "status": "healthy",
+        "addedAt": "2024-02-25T10:45:00Z"
+      }
+    ],
+
+    "categories": [
+      { "id": "category_1", "name": "Cactus", "iconName": "sunny-outline" },
+      { "id": "category_2", "name": "Flores", "iconName": "flower-outline" },
+      { "id": "category_3", "name": "Tropicales", "iconName": "leaf-outline" },
+      { "id": "category_4", "name": "Suculentas", "iconName": "water-outline" },
+      { "id": "category_5", "name": "Árboles", "iconName": "git-branch-outline" },
+      { "id": "category_6", "name": "Interior", "iconName": "home-outline" }
+    ],
+
+    "plant_of_day": [{ "id": "pod_1", "plantId": "plant_1", "date": "2026-03-18" }],
+
+    "achievements": [
+      {
+        "id": "achievement_1",
+        "key": "streak_21",
+        "name": "Racha de 21 días",
+        "iconName": "flame-outline",
+        "type": "boolean",
+        "goal": null
+      },
+      {
+        "id": "achievement_2",
+        "key": "collector_50",
+        "name": "Coleccionista",
+        "iconName": "leaf-outline",
+        "type": "progress",
+        "goal": 50
+      },
+      {
+        "id": "achievement_3",
+        "key": "explorer_10",
+        "name": "Explorador",
+        "iconName": "compass-outline",
+        "type": "progress",
+        "goal": 10
+      }
+    ],
+
+    "user_achievements": [
+      {
+        "id": "ua_user1_achievement1",
+        "userId": "user_1",
+        "achievementId": "achievement_1",
+        "completed": true,
+        "progress": null,
+        "unlockedAt": "2026-03-18T08:00:00Z"
+      },
+      {
+        "id": "ua_user1_achievement2",
+        "userId": "user_1",
+        "achievementId": "achievement_2",
+        "completed": false,
+        "progress": 47,
+        "unlockedAt": null
+      },
+      {
+        "id": "ua_user1_achievement3",
+        "userId": "user_1",
+        "achievementId": "achievement_3",
+        "completed": false,
+        "progress": 6,
+        "unlockedAt": null
+      }
+    ],
+
+    "calendar_entries": [
+      { "id": "cal_user1_20260303", "userId": "user_1", "date": "2026-03-03" },
+      { "id": "cal_user1_20260307", "userId": "user_1", "date": "2026-03-07" },
+      { "id": "cal_user1_20260310", "userId": "user_1", "date": "2026-03-10" },
+      { "id": "cal_user1_20260312", "userId": "user_1", "date": "2026-03-12" },
+      { "id": "cal_user1_20260314", "userId": "user_1", "date": "2026-03-14" },
+      { "id": "cal_user1_20260315", "userId": "user_1", "date": "2026-03-15" },
+      { "id": "cal_user1_20260317", "userId": "user_1", "date": "2026-03-17" },
+      { "id": "cal_user1_20260318", "userId": "user_1", "date": "2026-03-18" },
+      { "id": "cal_user1_20260324", "userId": "user_1", "date": "2026-03-24" },
+      { "id": "cal_user1_20260325", "userId": "user_1", "date": "2026-03-25" },
+      { "id": "cal_user1_20260331", "userId": "user_1", "date": "2026-03-31" }
+    ],
+
+    "reminders": [
+      {
+        "id": "reminder_1",
+        "userId": "user_1",
+        "plantId": "plant_1",
+        "type": "water",
+        "recurrence": "weekly",
+        "nextScheduledAt": "2026-03-25T18:00:00Z",
+        "lastCompletedAt": "2026-03-18T18:00:00Z"
+      }
+    ],
+
+    "explore_filters": [
+      { "id": "filter_1", "key": "all", "label": "Todo" },
+      { "id": "filter_2", "key": "indoors", "label": "Interiores" },
+      { "id": "filter_3", "key": "tropical", "label": "Tropicales" },
+      { "id": "filter_4", "key": "succulent", "label": "Suculentas" },
+      { "id": "filter_5", "key": "flowers", "label": "Flores" }
+    ],
+
+    "explore_featured": [
+      {
+        "id": "featured_1",
+        "plantId": "plant_1",
+        "weeklyRank": 1,
+        "featured": true,
+        "trending": false,
+        "identifiedByHandle": "@plantlover92"
+      },
+      {
+        "id": "featured_2",
+        "plantId": "plant_2",
+        "weeklyRank": 2,
+        "featured": false,
+        "trending": false,
+        "identifiedByHandle": null
+      },
+      {
+        "id": "featured_3",
+        "plantId": "plant_3",
+        "weeklyRank": 3,
+        "featured": true,
+        "trending": true,
+        "identifiedByHandle": "@botanica.mx"
+      },
+      {
+        "id": "featured_4",
+        "plantId": "plant_4",
+        "weeklyRank": 4,
+        "featured": false,
+        "trending": false,
+        "identifiedByHandle": null
+      }
+    ],
+
+    "plant_likes": [
+      { "id": "like_user1_plant1", "userId": "user_1", "plantId": "plant_1", "likedAt": "2026-03-18T10:05:00Z" }
+    ]
+  }
+}

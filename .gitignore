@@ -41,3 +41,14 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Firebase credentials
+src/data/migracionFirebase/serviceAccountKey.json
+
+# Backend Python
+backend/.env
+backend/.venv/
+backend/**/__pycache__/
+backend/**/*.pyc
+
+
