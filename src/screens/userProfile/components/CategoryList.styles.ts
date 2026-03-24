@@ -32,8 +32,8 @@ const createCategoryListStyle = (theme: AppTheme) => {
       paddingVertical: 7,
       gap: 6,
     },
-    categoryEmoji: {
-      fontSize: 13,
+    categoryIcon: {
+      lineHeight: 13,
     },
     categoryName: {
       fontSize: theme.fontSize.bodySmall,
