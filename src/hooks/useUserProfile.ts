@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { mapCategory, mapPlant, mapUser } from '@/src/mappers/user.mapper';
 import { ApiError } from '@/src/services/api';
 import {
   fetchPlantDetail,
@@ -6,15 +7,10 @@ import {
   fetchUserProfile,
 } from '@/src/services/userProfile.service';
 import {
-  ApiCategory,
-  ApiPlant,
-  ApiUser,
-  ApiUserPlant,
   Category,
   Plant,
   UserProfileData,
 } from '@/src/types-dtos/user.types';
-import { formatBirthdate } from '@/src/utils/date';
 
 // TODO: reemplazar con auth context cuando exista
 const USER_ID = 'user_1';
@@ -27,44 +23,6 @@ export type ProfileState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
   | { status: 'success'; user: UserProfileData; categories: Category[]; plants: Plant[] };
-
-// ---------------------------------------------------------------------------
-// Mappers (privados al módulo)
-// ---------------------------------------------------------------------------
-
-function mapUser(user: ApiUser): UserProfileData {
-  return {
-    name: user.fullName,
-    handle: user.username,
-    bio: user.bio,
-    birthdate: formatBirthdate(user.birthdate),
-    avatarUrl: user.photoURL,
-    stats: {
-      plants: user.stats.plantsCount,
-      friends: 0, // TODO: agregar endpoint de amigos cuando exista
-      streak: user.stats.streakDays,
-    },
-  };
-}
-
-function mapCategory(cat: ApiCategory): Category {
-  return {
-    iconName: cat.iconName,
-    name: cat.name,
-  };
-}
-
-function mapPlant(userPlant: ApiUserPlant, plant: ApiPlant): Plant {
-  const statusMap: Record<string, string> = {
-    healthy: '🌱 Saludable',
-  };
-  return {
-    id: userPlant.id,
-    name: plant.name,
-    status: statusMap[userPlant.status] ?? '🌿 En cuidado',
-    image: userPlant.photoUrl,
-  };
-}
 
 // ---------------------------------------------------------------------------
 // Hook
