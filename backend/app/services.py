@@ -1,6 +1,7 @@
 from typing import Any
 
 from fastapi import HTTPException
+from google.cloud.firestore_v1.base_query import FieldFilter
 
 from .firebase import get_firestore_client
 
@@ -52,7 +53,7 @@ def get_collection(
     query = db.collection(collection_name)
 
     for field_name, operator, value in filters or []:
-        query = query.where(field_name, operator, value)
+        query = query.where(filter=FieldFilter(field_name, operator, value))
 
     if order_by:
         query = query.order_by(order_by)

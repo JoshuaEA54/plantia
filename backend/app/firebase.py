@@ -16,10 +16,15 @@ def get_firestore_client() -> firestore.Client:
             f"{settings.firebase_service_account_path}"
         )
 
-    if not firebase_admin._apps:
+    try:
+        app = firebase_admin.get_app()
+    except ValueError:
         credential = credentials.Certificate(
             str(settings.firebase_service_account_path)
         )
-        firebase_admin.initialize_app(credential)
+        try:
+            app = firebase_admin.initialize_app(credential)
+        except ValueError:
+            app = firebase_admin.get_app()
 
-    return firestore.client()
+    return firestore.client(app=app)
