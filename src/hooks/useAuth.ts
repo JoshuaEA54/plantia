@@ -7,6 +7,7 @@ const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:8000";
 
 GoogleSignin.configure({
   scopes: ["profile", "email"],
+  webClientId: "716068876990-v61vffcosd27itak3jbasvgfuo5ef04i.apps.googleusercontent.com",
 });
 
 export function useAuth() {

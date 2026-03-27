@@ -38,7 +38,27 @@ Necesario para Google Sign-In. Para obtenerlo:
 
 Necesario para el backend FastAPI. Obtenerlo desde Firebase Console → Project Settings → Service Accounts → Generate new private key. Colocarlo en `backend/`.
 
-### 4. Correr el backend
+### 4. Ajustes post-prebuild (reaplicar cada vez que se corra `expo prebuild`)
+
+#### a) Copiar `google-services.json` al directorio Android
+
+```bash
+cp google-services.json android/app/google-services.json
+```
+
+> Expo no lo copia automáticamente. Sin esto, Google Sign-In falla con `DEVELOPER_ERROR`.
+
+#### b) Forzar JDK 21 en `android/gradle.properties`
+
+Agregar esta línea al archivo `android/gradle.properties`:
+
+```properties
+org.gradle.java.home=C:/Program Files/Android/Android Studio/jbr
+```
+
+> El sistema tiene Java 24 instalado, que rompe las tareas CMake de Prefab (expo-modules-core, react-native-screens, react-native-worklets). El JDK 21 embebido de Android Studio no tiene este problema.
+
+### 5. Correr el backend
 
 ```bash
 cd plantia
