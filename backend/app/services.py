@@ -59,3 +59,38 @@ def get_collection(
         query = query.order_by(order_by)
 
     return [_serialize_document(document) for document in query.stream()]
+
+
+def find_or_create_user_by_google(
+    google_id: str,
+    email: str,
+    full_name: str,
+    photo_url: str,
+) -> str:
+    from datetime import datetime, timezone
+
+    db = get_firestore_client()
+    users_ref = db.collection("users")
+
+    results = list(
+        users_ref.where(filter=FieldFilter("email", "==", email)).limit(1).stream()
+    )
+    if results:
+        return results[0].id
+
+    now = datetime.now(timezone.utc).isoformat()
+    username = email.split("@")[0]
+    _, new_doc = users_ref.add({
+        "fullName": full_name,
+        "username": username,
+        "email": email,
+        "bio": "",
+        "birthdate": "",
+        "photoURL": photo_url,
+        "stats": {"plantsCount": 0, "streakDays": 0},
+        "acceptedTerms": True,
+        "googleId": google_id,
+        "createdAt": now,
+        "updatedAt": now,
+    })
+    return new_doc.id

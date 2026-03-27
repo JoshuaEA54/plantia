@@ -12,10 +12,13 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegisterTheme } from './Register.styles';
+import { useAuth } from '@/src/hooks/useAuth';
+import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 
 export default function RegisterScreen() {
   const { theme, styles } = useRegisterTheme();
   const router = useRouter();
+  const { authGoogle, isLoading } = useAuth();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -211,6 +214,22 @@ export default function RegisterScreen() {
           >
             <Text style={styles.submitButtonText}>Crear mi cuenta</Text>
           </TouchableOpacity>
+
+          {/* Divider */}
+          <View style={styles.dividerRow}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>o</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          {/* Google */}
+          <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Light}
+            onPress={authGoogle}
+            disabled={isLoading}
+            style={styles.googleSignInButton}
+          />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

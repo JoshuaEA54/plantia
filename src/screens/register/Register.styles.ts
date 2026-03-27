@@ -151,6 +151,27 @@ const createRegisterStyle = (theme: AppTheme) => {
       fontSize: theme.fontSize.body,
       color: theme.colors.white,
     },
+    dividerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: theme.spacing.lg,
+      gap: theme.spacing.sm,
+    },
+    dividerLine: {
+      flex: 1,
+      height: 1,
+      backgroundColor: theme.colors.border,
+    },
+    dividerText: {
+      fontFamily: theme.fontFamily.regular,
+      fontSize: theme.fontSize.bodySmall,
+      color: theme.colors.textMuted,
+    },
+    googleSignInButton: {
+      width: '100%',
+      height: 48,
+      marginTop: theme.spacing.md,
+    },
   });
 };
 

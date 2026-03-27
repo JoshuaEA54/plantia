@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAuthContext } from '@/src/context/AuthContext';
 import { mapCategory, mapPlant, mapUser } from '@/src/mappers/user.mapper';
 import { ApiError } from '@/src/services/api';
 import {
@@ -11,9 +12,6 @@ import {
   Plant,
   UserProfileData,
 } from '@/src/types-dtos/user.types';
-
-// TODO: reemplazar con auth context cuando exista
-const USER_ID = 'user_1';
 
 // ---------------------------------------------------------------------------
 // Máquina de estados
@@ -29,16 +27,18 @@ export type ProfileState =
 // ---------------------------------------------------------------------------
 
 export function useUserProfile(): ProfileState {
+  const { userId } = useAuthContext();
   const [state, setState] = useState<ProfileState>({ status: 'loading' });
 
   useEffect(() => {
+    if (!userId) return;
     let cancelled = false;
 
     async function load() {
       try {
         const [profile, userPlants] = await Promise.all([
-          fetchUserProfile(USER_ID),
-          fetchUserPlants(USER_ID),
+          fetchUserProfile(userId),
+          fetchUserPlants(userId),
         ]);
 
         const plantDetails = await Promise.all(
@@ -66,7 +66,7 @@ export function useUserProfile(): ProfileState {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [userId]);
 
   return state;
 }
