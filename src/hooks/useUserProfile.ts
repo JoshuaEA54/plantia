@@ -32,13 +32,14 @@ export function useUserProfile(): ProfileState {
 
   useEffect(() => {
     if (!userId) return;
+    const currentUserId = userId;
     let cancelled = false;
 
     async function load() {
       try {
         const [profile, userPlants] = await Promise.all([
-          fetchUserProfile(userId),
-          fetchUserPlants(userId),
+          fetchUserProfile(currentUserId),
+          fetchUserPlants(currentUserId),
         ]);
 
         const plantDetails = await Promise.all(
