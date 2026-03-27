@@ -17,9 +17,9 @@ export function mapUser(user: ApiUser): UserProfileData {
     birthdate: formatBirthdate(user.birthdate),
     avatarUrl: user.photoURL,
     stats: {
-      plants: user.stats.plantsCount,
+      plants: user.stats?.plantsCount ?? 0,
       friends: 0,
-      streak: user.stats.streakDays,
+      streak: user.stats?.streakDays ?? 0,
     },
   };
 }

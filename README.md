@@ -38,7 +38,23 @@ Necesario para Google Sign-In. Para obtenerlo:
 
 Necesario para el backend FastAPI. Obtenerlo desde Firebase Console → Project Settings → Service Accounts → Generate new private key. Colocarlo en `backend/`.
 
-### 4. Ajustes post-prebuild (reaplicar cada vez que se corra `expo prebuild`)
+### 4. Reenvío de puertos para dispositivo físico (cada vez que conectes el celular)
+
+Con el celular conectado por USB y depuración USB activada, correr en PowerShell:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" reverse tcp:8000 tcp:8000
+```
+
+Esto hace que `localhost:8000` en el celular apunte al backend de la PC. El `.env` debe tener:
+
+```env
+EXPO_PUBLIC_API_URL=http://localhost:8000
+```
+
+> Se pierde al desconectar el USB — hay que correrlo de nuevo cada vez.
+
+### 5. Ajustes post-prebuild (reaplicar cada vez que se corra `expo prebuild`)
 
 #### a) Copiar `google-services.json` al directorio Android
 
@@ -48,7 +64,17 @@ cp google-services.json android/app/google-services.json
 
 > Expo no lo copia automáticamente. Sin esto, Google Sign-In falla con `DEVELOPER_ERROR`.
 
-#### b) Forzar JDK 21 en `android/gradle.properties`
+#### b) Reemplazar el debug keystore
+
+Expo genera un `debug.keystore` propio en `android/app/`, pero el SHA-1 registrado en Firebase es el del keystore estándar de Android (`~/.android/debug.keystore`). Hay que reemplazarlo:
+
+```bash
+cp "$USERPROFILE/.android/debug.keystore" android/app/debug.keystore
+```
+
+> Sin esto, Google Sign-In falla con `DEVELOPER_ERROR` aunque todo lo demás esté bien configurado.
+
+#### c) Forzar JDK 21 en `android/gradle.properties`
 
 Agregar esta línea al archivo `android/gradle.properties`:
 
