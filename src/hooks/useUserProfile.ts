@@ -31,7 +31,10 @@ export function useUserProfile(): ProfileState {
   const [state, setState] = useState<ProfileState>({ status: 'loading' });
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      setState({ status: 'error', message: 'No has iniciado sesión' });
+      return;
+    }
     const currentUserId = userId;
     let cancelled = false;
 
