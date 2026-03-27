@@ -42,7 +42,7 @@ Necesario para el backend FastAPI. Obtenerlo desde Firebase Console → Project 
 
 ```bash
 cd plantia
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 5. Correr la app (primera vez o tras instalar paquetes nativos)
