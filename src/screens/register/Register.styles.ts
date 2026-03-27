@@ -167,11 +167,6 @@ const createRegisterStyle = (theme: AppTheme) => {
       fontSize: theme.fontSize.bodySmall,
       color: theme.colors.textMuted,
     },
-    googleSignInButton: {
-      width: '100%',
-      height: 48,
-      marginTop: theme.spacing.md,
-    },
   });
 };
 

@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegisterTheme } from './Register.styles';
 import { useAuth } from '@/src/hooks/useAuth';
-import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import GoogleSignInButton from '@/src/components/common/GoogleSignInButton';
 
 export default function RegisterScreen() {
   const { theme, styles } = useRegisterTheme();
@@ -223,13 +223,7 @@ export default function RegisterScreen() {
           </View>
 
           {/* Google */}
-          <GoogleSigninButton
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Light}
-            onPress={authGoogle}
-            disabled={isLoading}
-            style={styles.googleSignInButton}
-          />
+          <GoogleSignInButton onPress={authGoogle} disabled={isLoading} />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
