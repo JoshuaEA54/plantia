@@ -37,13 +37,35 @@ pip install -r requirements.txt
 
 ## Ejecutar
 
-Desde la raíz de `plantia/`:
+Todos los comandos se corren desde la raíz de `plantia/`.
+
+### Desarrollo
 
 ```powershell
-.venv\Scripts\uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+ uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-La documentación interactiva queda disponible en `http://127.0.0.1:8000/docs`.
+Docs: `http://127.0.0.1:8000/docs`
+
+### Dispositivo físico / emulador en red
+
+Para que el celular pueda conectarse, el servidor debe escuchar en todas las interfaces (`0.0.0.0`):
+
+```powershell
+.venv\Scripts\uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Luego en el frontend (`plantia/.env`) apunta a la IP local de la máquina:
+
+```env
+EXPO_PUBLIC_API_URL=http://<IP-de-la-máquina>:8000
+```
+
+> Para saber la IP: `ipconfig` en Windows → "Dirección IPv4" de la red WiFi activa.
+
+Docs: `http://<IP-de-la-máquina>:8000/docs`
+
+> **Nota de seguridad:** `0.0.0.0` expone la API a toda la red local. Usar solo en desarrollo.
 
 ## Endpoints
 

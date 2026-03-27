@@ -171,3 +171,19 @@ class ApiCollectionResponse(BaseModel):
     collection: str
     count: int
     items: list[dict]
+
+
+# ---------------------------------------------------------------------------
+# Auth
+# ---------------------------------------------------------------------------
+
+
+class GoogleAuthRequest(BaseModel):
+    googleId: str
+    email: str
+    fullName: str
+    photoURL: str
+
+
+class GoogleAuthResponse(BaseModel):
+    userId: str

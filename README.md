@@ -1,50 +1,117 @@
-# Welcome to your Expo app 👋
+# Plantia
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Diario botánico personal. App móvil en React Native (Expo) con backend FastAPI + Firebase/Firestore.
 
-## Get started
+## Setup
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1. Instalar dependencias
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Variables de entorno
 
-## Learn more
+Crear un archivo `.env` en la raíz con:
 
-To learn more about developing your project with Expo, look at the following resources:
+```env
+EXPO_PUBLIC_API_URL=http://10.0.2.2:8000
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+> `10.0.2.2` es el localhost del emulador Android. Para dispositivo físico usá la IP local de tu máquina.
 
-## Join the community
+### 3. Archivos de credenciales (no están en el repo)
 
-Join our community of developers creating universal apps.
+#### `google-services.json` (Android)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Necesario para Google Sign-In. Para obtenerlo:
+
+1. Ir a [Firebase Console](https://console.firebase.google.com) → proyecto **plantia-e7669**
+2. Project Settings → General → app Android (`com.plantia.app`)
+3. Agregar el SHA-1 de tu keystore de debug:
+   ```bash
+   keytool -list -v -keystore "C:Users<TU_USUARIO>.androiddebug.keystore" -alias androiddebugkey -storepass android -keypass android
+   ```
+4. Descargar `google-services.json` y colocarlo en la raíz del proyecto (junto a `app.json`)
+
+#### `serviceAccountKey.json` (Backend)
+
+Necesario para el backend FastAPI. Obtenerlo desde Firebase Console → Project Settings → Service Accounts → Generate new private key. Colocarlo en `backend/`.
+
+### 4. Reenvío de puertos para dispositivo físico (cada vez que conectes el celular)
+
+Con el celular conectado por USB y depuración USB activada, correr en PowerShell:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" reverse tcp:8000 tcp:8000
+```
+
+Esto hace que `localhost:8000` en el celular apunte al backend de la PC. El `.env` debe tener:
+
+```env
+EXPO_PUBLIC_API_URL=http://localhost:8000
+```
+
+> Se pierde al desconectar el USB — hay que correrlo de nuevo cada vez.
+
+### 5. Ajustes post-prebuild (reaplicar cada vez que se corra `expo prebuild`)
+
+#### a) Copiar `google-services.json` al directorio Android
+
+```bash
+cp google-services.json android/app/google-services.json
+```
+
+> Expo no lo copia automáticamente. Sin esto, Google Sign-In falla con `DEVELOPER_ERROR`.
+
+#### b) Reemplazar el debug keystore
+
+Expo genera un `debug.keystore` propio en `android/app/`, pero el SHA-1 registrado en Firebase es el del keystore estándar de Android (`~/.android/debug.keystore`). Hay que reemplazarlo:
+
+```bash
+cp "$USERPROFILE/.android/debug.keystore" android/app/debug.keystore
+```
+
+> Sin esto, Google Sign-In falla con `DEVELOPER_ERROR` aunque todo lo demás esté bien configurado.
+
+#### c) Forzar JDK 21 en `android/gradle.properties`
+
+Agregar esta línea al archivo `android/gradle.properties`:
+
+```properties
+org.gradle.java.home=C:/Program Files/Android/Android Studio/jbr
+```
+
+> El sistema tiene Java 24 instalado, que rompe las tareas CMake de Prefab (expo-modules-core, react-native-screens, react-native-worklets). El JDK 21 embebido de Android Studio no tiene este problema.
+
+### 5. Correr el backend
+
+```bash
+cd plantia
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### 5. Correr la app (primera vez o tras instalar paquetes nativos)
+
+```bash
+npx expo prebuild --platform android
+npx expo run:android
+```
+
+### 6. Correr la app (después, sin cambios nativos)
+
+```bash
+npx expo start
+```
+
+## Autenticación Google
+
+La app usa `@react-native-google-signin/google-signin`. El flujo es:
+
+1. Usuario presiona "Continuar con Google"
+2. Se abre el selector de cuenta de Google (nativo)
+3. Se envía `{ googleId, email, fullName, photoURL }` al backend (`POST /api/auth/google`)
+4. El backend busca o crea el usuario en Firestore y retorna el `userId`
+5. El `userId` se guarda en `AuthContext` y se usa en todo el app
+
+> Requiere `google-services.json` y un build nativo (`expo run:android`). No funciona con Expo Go.

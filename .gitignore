@@ -51,4 +51,11 @@ backend/.venv/
 backend/**/__pycache__/
 backend/**/*.pyc
 
+# Front
+.env
 
+
+
+# Google Services (contiene credenciales, no subir)
+google-services.json
+GoogleService-Info.plist

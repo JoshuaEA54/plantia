@@ -16,8 +16,10 @@ from .models import (
     UserModel,
     UserPlantModel,
     UserProfileResponse,
+    GoogleAuthRequest,
+    GoogleAuthResponse,
 )
-from .services import get_collection, get_document
+from .services import get_collection, get_document, find_or_create_user_by_google
 
 router = APIRouter()
 
@@ -159,3 +161,19 @@ def read_collection(collection_name: str) -> dict:
         "count": len(items),
         "items": items,
     }
+
+
+# ---------------------------------------------------------------------------
+# Auth
+# ---------------------------------------------------------------------------
+
+
+@router.post("/api/auth/google", response_model=GoogleAuthResponse)
+def google_auth(body: GoogleAuthRequest) -> dict:
+    user_id = find_or_create_user_by_google(
+        google_id=body.googleId,
+        email=body.email,
+        full_name=body.fullName,
+        photo_url=body.photoURL,
+    )
+    return {"userId": user_id}

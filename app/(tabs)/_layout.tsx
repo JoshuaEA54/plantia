@@ -1,10 +1,14 @@
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import CameraTabButton from '@/src/components/common/CameraTabButton';
 import { useTabLayoutTheme } from '@/src/components/common/TabLayout.styles';
+import { useAuthContext } from '@/src/context/AuthContext';
 
 export default function TabLayout() {
+  const { userId } = useAuthContext();
   const { theme, styles } = useTabLayoutTheme();
+
+  if (!userId) return <Redirect href="/register" />;
 
   return (
     <Tabs
