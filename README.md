@@ -41,14 +41,8 @@ Necesario para el backend FastAPI. Obtenerlo desde Firebase Console → Project 
 ### 4. Correr el backend
 
 ```bash
-cd backend
+cd plantia
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-O desde la raíz:
-
-```bash
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 5. Correr la app (primera vez o tras instalar paquetes nativos)
