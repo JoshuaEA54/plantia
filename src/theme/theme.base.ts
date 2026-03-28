@@ -13,6 +13,11 @@ export interface ThemeColors {
   textSecondary: string;
   textMuted: string;
   border: string;
+  error: string;
+  success: string;
+  warning: string;
+  inputBackground: string;
+  disabled: string;
 }
 
 export interface ThemeSpacing {

@@ -61,6 +61,18 @@ def get_collection(
     return [_serialize_document(document) for document in query.stream()]
 
 
+def update_document(collection_name: str, document_id: str, data: dict) -> dict[str, Any]:
+    db = get_firestore_client()
+    ref = db.collection(collection_name).document(document_id)
+    if not ref.get().exists:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No se encontró el documento '{document_id}' en '{collection_name}'.",
+        )
+    ref.update(data)
+    return _serialize_document(ref.get())
+
+
 def find_or_create_user_by_google(
     google_id: str,
     email: str,

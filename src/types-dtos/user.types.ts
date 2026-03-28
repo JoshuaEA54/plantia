@@ -70,7 +70,11 @@ export type ApiUserPlant = {
 export type ApiPlant = {
   id: string;
   name: string;
+  family: string;
+  habitat: string;
+  categoryId: string;
   imageUrl: string;
+  description: string;
 };
 
 export type ApiPlantDetailResponse = {

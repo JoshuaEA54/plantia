@@ -1,19 +1,23 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 import { useAuthContext } from "@/src/context/AuthContext";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:8000";
-
-GoogleSignin.configure({
-  scopes: ["profile", "email"],
-  webClientId: "716068876990-v61vffcosd27itak3jbasvgfuo5ef04i.apps.googleusercontent.com",
-});
 
 export function useAuth() {
   const { setUserId } = useAuthContext();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  GoogleSignin.configure({
+    scopes: ["profile", "email"],
+    webClientId:
+      "716068876990-v61vffcosd27itak3jbasvgfuo5ef04i.apps.googleusercontent.com",
+  });
 
   const authGoogle = async () => {
     setIsLoading(true);

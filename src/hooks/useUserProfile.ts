@@ -8,6 +8,8 @@ import {
   fetchUserProfile,
 } from '@/src/services/userProfile.service';
 import {
+  ApiPlant,
+  ApiUser,
   Category,
   Plant,
   UserProfileData,
@@ -20,7 +22,7 @@ import {
 export type ProfileState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
-  | { status: 'success'; user: UserProfileData; categories: Category[]; plants: Plant[] };
+  | { status: 'success'; user: UserProfileData; categories: Category[]; plants: Plant[]; rawUser: ApiUser; rawPlants: ApiPlant[] };
 
 // ---------------------------------------------------------------------------
 // Hook
@@ -56,6 +58,8 @@ export function useUserProfile(): ProfileState {
           user: mapUser(profile.user),
           categories: profile.categories.map(mapCategory),
           plants: userPlants.map((up, i) => mapPlant(up, plantDetails[i].plant)),
+          rawUser: profile.user,
+          rawPlants: plantDetails.map((d) => d.plant),
         });
       } catch (err) {
         if (cancelled) return;

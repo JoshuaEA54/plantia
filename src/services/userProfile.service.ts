@@ -1,5 +1,7 @@
 import {
+  ApiPlant,
   ApiPlantDetailResponse,
+  ApiUser,
   ApiUserPlant,
   ApiUserProfileResponse,
 } from '@/src/types-dtos/user.types';
@@ -15,4 +17,18 @@ export function fetchUserPlants(userId: string): Promise<ApiUserPlant[]> {
 
 export function fetchPlantDetail(plantId: string): Promise<ApiPlantDetailResponse> {
   return apiFetch<ApiPlantDetailResponse>(`/api/plants/${plantId}`);
+}
+
+export function updateUserProfile(userId: string, data: Partial<Pick<ApiUser, 'fullName' | 'username' | 'bio' | 'birthdate'>>): Promise<ApiUser> {
+  return apiFetch<ApiUser>(`/api/users/${userId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export function updatePlant(plantId: string, data: Partial<Pick<ApiPlant, 'name' | 'family' | 'habitat' | 'description'>>): Promise<ApiPlant> {
+  return apiFetch<ApiPlant>(`/api/plants/${plantId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
 }
