@@ -14,19 +14,15 @@ import {
   Plant,
   UserProfileData,
 } from '@/src/types-dtos/user.types';
+import { AsyncState } from '@/src/types-dtos/async-state';
 
-// ---------------------------------------------------------------------------
-// Máquina de estados
-// ---------------------------------------------------------------------------
-
-export type ProfileState =
-  | { status: 'loading' }
-  | { status: 'error'; message: string }
-  | { status: 'success'; user: UserProfileData; categories: Category[]; plants: Plant[]; rawUser: ApiUser; rawPlants: ApiPlant[] };
-
-// ---------------------------------------------------------------------------
-// Hook
-// ---------------------------------------------------------------------------
+export type ProfileState = AsyncState<{
+  user: UserProfileData;
+  categories: Category[];
+  plants: Plant[];
+  rawUser: ApiUser;
+  rawPlants: ApiPlant[];
+}>;
 
 export function useUserProfile(): ProfileState {
   const { userId } = useAuthContext();

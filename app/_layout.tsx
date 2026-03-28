@@ -1,18 +1,30 @@
 import { Stack } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Nunito_400Regular, Nunito_500Medium, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold } from "@expo-google-fonts/nunito";
 import { AuthProvider, useAuthContext } from "@/src/context/AuthContext";
+import AnimatedSplash from "@/src/components/common/AnimatedSplash";
 
 SplashScreen.preventAutoHideAsync();
 
 function RootNavigator() {
   const { userId, isLoading } = useAuthContext();
+  const [showSplash, setShowSplash] = useState(true);
 
+  // Ocultar splash nativa en cuanto el JS carga — el componente React toma el relevo
   useEffect(() => {
-    if (!isLoading) SplashScreen.hideAsync();
-  }, [isLoading]);
+    SplashScreen.hideAsync();
+  }, []);
+
+  if (showSplash) {
+    return (
+      <AnimatedSplash
+        isReady={!isLoading}
+        onComplete={() => setShowSplash(false)}
+      />
+    );
+  }
 
   return (
     <Stack>
