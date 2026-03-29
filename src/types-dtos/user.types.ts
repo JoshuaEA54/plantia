@@ -11,7 +11,6 @@ export type Plant = {
 };
 
 export type Category = {
-  iconName: string;
   name: string;
 };
 
@@ -49,7 +48,6 @@ export type ApiUser = {
 export type ApiCategory = {
   id: string;
   name: string;
-  iconName: string;
 };
 
 export type ApiUserProfileResponse = {

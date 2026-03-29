@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useAuthContext } from '@/src/context/AuthContext';
-import { mapCategory, mapPlant, mapUser } from '@/src/mappers/user.mapper';
+import { mapPlant, mapUser } from '@/src/mappers/user.mapper';
 import { ApiError } from '@/src/services/api';
 import {
   fetchPlantDetail,
@@ -46,10 +46,23 @@ export function useUserProfile(): { state: ProfileState; refetch: () => void } {
 
         if (cancelled) return;
 
+        const categoryNameById = new Map(
+          profile.categories.map((category) => [category.id, category.name]),
+        );
+        const userCategoryIds = new Set(
+          plantDetails
+            .map((detail) => detail.plant.categoryId)
+            .filter((categoryId): categoryId is string => Boolean(categoryId)),
+        );
+        const categories = [...userCategoryIds]
+          .map((categoryId) => categoryNameById.get(categoryId))
+          .filter((name): name is string => Boolean(name))
+          .map((name) => ({ name }));
+
         setState({
           status: 'success',
           user: mapUser(profile.user),
-          categories: profile.categories.map(mapCategory),
+          categories,
           plants: userPlants.map((up, i) => mapPlant(up, plantDetails[i].plant)),
           rawUser: profile.user,
         });

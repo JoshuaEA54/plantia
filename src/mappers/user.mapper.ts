@@ -1,9 +1,7 @@
 import {
-  ApiCategory,
   ApiPlant,
   ApiUser,
   ApiUserPlant,
-  Category,
   Plant,
   UserProfileData,
 } from '@/src/types-dtos/user.types';
@@ -20,13 +18,6 @@ export function mapUser(user: ApiUser): UserProfileData {
       plants: user.stats?.plantsCount ?? 0,
       streak: user.stats?.streakDays ?? 0,
     },
-  };
-}
-
-export function mapCategory(category: ApiCategory): Category {
-  return {
-    iconName: category.iconName,
-    name: category.name,
   };
 }
 
