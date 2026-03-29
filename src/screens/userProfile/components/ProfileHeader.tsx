@@ -6,15 +6,16 @@ import { useProfileHeaderTheme } from './ProfileHeader.styles';
 interface ProfileHeaderProps {
   user: UserProfileData;
   topInset: number;
+  onEditPress?: () => void;
 }
 
-export default function ProfileHeader({ user, topInset }: ProfileHeaderProps) {
+export default function ProfileHeader({ user, topInset, onEditPress }: ProfileHeaderProps) {
   const { theme, styles } = useProfileHeaderTheme();
 
   return (
     <View style={[styles.header, { paddingTop: topInset + 12 }]}>
-      <TouchableOpacity style={styles.settingsButton}>
-        <Ionicons name="settings-outline" size={18} color={theme.colors.white} />
+      <TouchableOpacity style={styles.settingsButton} onPress={onEditPress}>
+        <Ionicons name="pencil" size={18} color={theme.colors.white} />
       </TouchableOpacity>
 
       {/* Avatar */}

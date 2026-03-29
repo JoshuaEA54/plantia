@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useRouter } from "expo-router";
 import {
   GoogleSignin,
   statusCodes,
@@ -10,7 +9,6 @@ const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export function useAuth() {
   const { setUserId } = useAuthContext();
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   GoogleSignin.configure({
@@ -41,8 +39,7 @@ export function useAuth() {
       if (!res.ok) throw new Error("Error al registrar con el servidor");
 
       const data = await res.json();
-      setUserId(data.userId);
-      router.replace("/(tabs)");
+      await setUserId(data.userId);
     } catch (e: unknown) {
       if (e instanceof Error && "code" in e) {
         const code = (e as { code: string }).code;

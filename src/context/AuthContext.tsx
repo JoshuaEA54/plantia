@@ -14,7 +14,6 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [userId, _setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     SecureStore.getItemAsync(STORAGE_KEY)
       .then((id) => _setUserId(id))
@@ -31,7 +30,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ userId, isLoading, setUserId }}>
+    <AuthContext.Provider
+      value={{
+        userId,
+        isLoading,
+        setUserId,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

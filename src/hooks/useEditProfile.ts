@@ -1,12 +1,17 @@
+import { useEffect } from 'react';
 import { AsyncState } from '@/src/types-dtos/async-state';
 import { ApiUser } from '@/src/types-dtos/user.types';
 import { useUserProfile } from './useUserProfile';
 
 export function useEditProfile(): AsyncState<{ user: ApiUser }> {
-  const profile = useUserProfile();
+  const { state, refetch } = useUserProfile();
 
-  if (profile.status === 'loading') return { status: 'loading' };
-  if (profile.status === 'error') return { status: 'error', message: profile.message };
+  useEffect(() => {
+    return refetch();
+  }, [refetch]);
 
-  return { status: 'success', user: profile.rawUser };
+  if (state.status === 'loading') return { status: 'loading' };
+  if (state.status === 'error') return { status: 'error', message: state.message };
+
+  return { status: 'success', user: state.rawUser };
 }

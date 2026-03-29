@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAuthContext } from '@/src/context/AuthContext';
 import { mapCategory, mapPlant, mapUser } from '@/src/mappers/user.mapper';
 import { ApiError } from '@/src/services/api';
@@ -24,23 +24,22 @@ export type ProfileState = AsyncState<{
   rawPlants: ApiPlant[];
 }>;
 
-export function useUserProfile(): ProfileState {
+export function useUserProfile(): { state: ProfileState; refetch: () => void } {
   const { userId } = useAuthContext();
   const [state, setState] = useState<ProfileState>({ status: 'loading' });
 
-  useEffect(() => {
+  const load = useCallback(() => {
     if (!userId) {
       setState({ status: 'error', message: 'No has iniciado sesión' });
       return;
     }
-    const currentUserId = userId;
     let cancelled = false;
 
-    async function load() {
+    async function doFetch() {
       try {
         const [profile, userPlants] = await Promise.all([
-          fetchUserProfile(currentUserId),
-          fetchUserPlants(currentUserId),
+          fetchUserProfile(userId!),
+          fetchUserPlants(userId!),
         ]);
 
         const plantDetails = await Promise.all(
@@ -66,11 +65,11 @@ export function useUserProfile(): ProfileState {
       }
     }
 
-    load();
+    doFetch();
     return () => {
       cancelled = true;
     };
   }, [userId]);
 
-  return state;
+  return { state, refetch: load };
 }
