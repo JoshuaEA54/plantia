@@ -38,6 +38,7 @@ export function mapPlant(userPlant: ApiUserPlant, plant: ApiPlant): Plant {
 
   return {
     id: userPlant.id,
+    plantId: plant.id,
     name: plant.name,
     status: statusMap[userPlant.status] ?? '🌿 En cuidado',
     image: userPlant.photoUrl,

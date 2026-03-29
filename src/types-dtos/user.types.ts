@@ -4,6 +4,7 @@
 
 export type Plant = {
   id: string;
+  plantId: string;
   name: string;
   status: string;
   image: string;

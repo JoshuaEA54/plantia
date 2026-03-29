@@ -8,7 +8,6 @@ import {
   fetchUserProfile,
 } from '@/src/services/userProfile.service';
 import {
-  ApiPlant,
   ApiUser,
   Category,
   Plant,
@@ -21,7 +20,6 @@ export type ProfileState = AsyncState<{
   categories: Category[];
   plants: Plant[];
   rawUser: ApiUser;
-  rawPlants: ApiPlant[];
 }>;
 
 export function useUserProfile(): { state: ProfileState; refetch: () => void } {
@@ -54,7 +52,6 @@ export function useUserProfile(): { state: ProfileState; refetch: () => void } {
           categories: profile.categories.map(mapCategory),
           plants: userPlants.map((up, i) => mapPlant(up, plantDetails[i].plant)),
           rawUser: profile.user,
-          rawPlants: plantDetails.map((d) => d.plant),
         });
       } catch (err) {
         if (cancelled) return;

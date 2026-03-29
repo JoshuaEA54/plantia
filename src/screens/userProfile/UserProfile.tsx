@@ -1,39 +1,24 @@
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useFocusEffect, useRouter } from 'expo-router';
-import { useUserProfile } from '@/src/hooks/useUserProfile';
+import { useRouter } from 'expo-router';
 import { useProfileTheme } from './UserProfile.styles';
 import ProfileHeader from './components/ProfileHeader';
 import UserStats from './components/UserStats';
 import CategoryList from './components/CategoryList';
 import PlantsList from './components/PlantsList';
+import { Category, Plant, UserProfileData } from '@/src/types-dtos/user.types';
 
-export default function UserProfile() {
+type Props = {
+  user: UserProfileData;
+  categories: Category[];
+  plants: Plant[];
+};
+
+export default function UserProfile({ user, categories, plants }: Props) {
   const insets = useSafeAreaInsets();
   const { styles } = useProfileTheme();
   const router = useRouter();
-  const { state, refetch } = useUserProfile();
-
-  useFocusEffect(refetch);
-
-  if (state.status === 'loading') {
-    return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
-  if (state.status === 'error') {
-    return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <Text>{state.message}</Text>
-      </View>
-    );
-  }
-
-  const { user, categories, plants, rawPlants } = state;
 
   return (
     <View style={styles.container}>
@@ -54,7 +39,6 @@ export default function UserProfile() {
         <CategoryList categories={categories} />
         <PlantsList
           plants={plants}
-          rawPlantIds={rawPlants.map((p) => p.id)}
           onEditPlant={(plantId) => router.push({ pathname: '/editPlant', params: { plantId } })}
         />
       </ScrollView>
