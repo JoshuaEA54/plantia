@@ -17,11 +17,6 @@ export default function UserStats({ stats }: UserStatsProps) {
       </View>
       <View style={styles.statDivider} />
       <View style={styles.statItem}>
-        <Text style={styles.statNumber}>{stats.friends}</Text>
-        <Text style={styles.statLabel}>Amigos</Text>
-      </View>
-      <View style={styles.statDivider} />
-      <View style={styles.statItem}>
         <Text style={styles.statNumber}>{stats.streak}🔥</Text>
         <Text style={styles.statLabel}>Racha</Text>
       </View>

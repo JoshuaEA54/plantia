@@ -37,10 +37,7 @@ export default function UserProfile({ user, categories, plants }: Props) {
 
         <UserStats stats={user.stats} />
         <CategoryList categories={categories} />
-        <PlantsList
-          plants={plants}
-          onEditPlant={(plantId) => router.push({ pathname: '/editPlant', params: { plantId } })}
-        />
+        <PlantsList plants={plants} />
       </ScrollView>
     </View>
   );

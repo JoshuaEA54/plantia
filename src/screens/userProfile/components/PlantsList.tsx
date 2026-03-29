@@ -6,10 +6,9 @@ import { usePlantsListTheme } from './PlantsList.styles';
 
 interface PlantsListProps {
   plants: Plant[];
-  onEditPlant?: (plantId: string) => void;
 }
 
-export default function PlantsList({ plants, onEditPlant }: PlantsListProps) {
+export default function PlantsList({ plants }: PlantsListProps) {
   const { theme, styles } = usePlantsListTheme();
 
   return (
@@ -34,7 +33,6 @@ export default function PlantsList({ plants, onEditPlant }: PlantsListProps) {
             name={plant.name}
             status={plant.status}
             image={plant.image}
-            onEdit={onEditPlant ? () => onEditPlant(plant.plantId) : undefined}
           />
         ))}
       </View>

@@ -23,7 +23,6 @@ export type UserProfileData = {
   avatarUrl: string;
   stats: {
     plants: number;
-    friends: number;
     streak: number;
   };
 };

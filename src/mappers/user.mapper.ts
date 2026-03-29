@@ -18,7 +18,6 @@ export function mapUser(user: ApiUser): UserProfileData {
     avatarUrl: user.photoURL,
     stats: {
       plants: user.stats?.plantsCount ?? 0,
-      friends: 0,
       streak: user.stats?.streakDays ?? 0,
     },
   };
