@@ -10,4 +10,9 @@ export const lightColors: ThemeColors = {
   textSecondary: '#6b7c6e',
   textMuted: '#a0b0a4',
   border: 'rgba(58,125,68,0.1)',
+  error: '#d32f2f',
+  success: '#2e7d32',
+  warning: '#f57f17',
+  inputBackground: '#ffffff',
+  disabled: '#e8ede9',
 };

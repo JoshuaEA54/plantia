@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAuthContext } from '@/src/context/AuthContext';
-import { mapCategory, mapPlant, mapUser } from '@/src/mappers/user.mapper';
+import { mapPlant, mapUser } from '@/src/mappers/user.mapper';
 import { ApiError } from '@/src/services/api';
 import {
   fetchPlantDetail,
@@ -8,41 +8,36 @@ import {
   fetchUserProfile,
 } from '@/src/services/userProfile.service';
 import {
+  ApiUser,
   Category,
   Plant,
   UserProfileData,
 } from '@/src/types-dtos/user.types';
+import { AsyncState } from '@/src/types-dtos/async-state';
 
-// ---------------------------------------------------------------------------
-// Máquina de estados
-// ---------------------------------------------------------------------------
+export type ProfileState = AsyncState<{
+  user: UserProfileData;
+  categories: Category[];
+  plants: Plant[];
+  rawUser: ApiUser;
+}>;
 
-export type ProfileState =
-  | { status: 'loading' }
-  | { status: 'error'; message: string }
-  | { status: 'success'; user: UserProfileData; categories: Category[]; plants: Plant[] };
-
-// ---------------------------------------------------------------------------
-// Hook
-// ---------------------------------------------------------------------------
-
-export function useUserProfile(): ProfileState {
+export function useUserProfile(): { state: ProfileState; refetch: () => void } {
   const { userId } = useAuthContext();
   const [state, setState] = useState<ProfileState>({ status: 'loading' });
 
-  useEffect(() => {
+  const load = useCallback(() => {
     if (!userId) {
       setState({ status: 'error', message: 'No has iniciado sesión' });
       return;
     }
-    const currentUserId = userId;
     let cancelled = false;
 
-    async function load() {
+    async function doFetch() {
       try {
         const [profile, userPlants] = await Promise.all([
-          fetchUserProfile(currentUserId),
-          fetchUserPlants(currentUserId),
+          fetchUserProfile(userId!),
+          fetchUserPlants(userId!),
         ]);
 
         const plantDetails = await Promise.all(
@@ -51,11 +46,25 @@ export function useUserProfile(): ProfileState {
 
         if (cancelled) return;
 
+        const categoryNameById = new Map(
+          profile.categories.map((category) => [category.id, category.name]),
+        );
+        const userCategoryIds = new Set(
+          plantDetails
+            .map((detail) => detail.plant.categoryId)
+            .filter((categoryId): categoryId is string => Boolean(categoryId)),
+        );
+        const categories = [...userCategoryIds]
+          .map((categoryId) => categoryNameById.get(categoryId))
+          .filter((name): name is string => Boolean(name))
+          .map((name) => ({ name }));
+
         setState({
           status: 'success',
           user: mapUser(profile.user),
-          categories: profile.categories.map(mapCategory),
+          categories,
           plants: userPlants.map((up, i) => mapPlant(up, plantDetails[i].plant)),
+          rawUser: profile.user,
         });
       } catch (err) {
         if (cancelled) return;
@@ -66,11 +75,11 @@ export function useUserProfile(): ProfileState {
       }
     }
 
-    load();
+    doFetch();
     return () => {
       cancelled = true;
     };
   }, [userId]);
 
-  return state;
+  return { state, refetch: load };
 }

@@ -30,10 +30,6 @@ const createCategoryListStyle = (theme: AppTheme) => {
       borderRadius: 20,
       paddingHorizontal: 14,
       paddingVertical: 7,
-      gap: 6,
-    },
-    categoryIcon: {
-      lineHeight: 13,
     },
     categoryName: {
       fontSize: theme.fontSize.bodySmall,

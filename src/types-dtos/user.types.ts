@@ -4,13 +4,13 @@
 
 export type Plant = {
   id: string;
+  plantId: string;
   name: string;
   status: string;
   image: string;
 };
 
 export type Category = {
-  iconName: string;
   name: string;
 };
 
@@ -22,7 +22,6 @@ export type UserProfileData = {
   avatarUrl: string;
   stats: {
     plants: number;
-    friends: number;
     streak: number;
   };
 };
@@ -49,7 +48,6 @@ export type ApiUser = {
 export type ApiCategory = {
   id: string;
   name: string;
-  iconName: string;
 };
 
 export type ApiUserProfileResponse = {
@@ -70,7 +68,11 @@ export type ApiUserPlant = {
 export type ApiPlant = {
   id: string;
   name: string;
+  family: string;
+  habitat: string;
+  categoryId: string;
   imageUrl: string;
+  description: string;
 };
 
 export type ApiPlantDetailResponse = {

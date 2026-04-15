@@ -2,7 +2,7 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { Plant } from '@/src/types-dtos/user.types';
 import { usePlantCardTheme } from './PlantCard.styles';
 
-type PlantCardProps = Plant;
+type PlantCardProps = Pick<Plant, 'id' | 'name' | 'status' | 'image'>;
 
 export default function PlantCard({ name, status, image }: PlantCardProps) {
   const { styles } = usePlantCardTheme();

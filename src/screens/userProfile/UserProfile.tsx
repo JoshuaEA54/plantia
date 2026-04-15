@@ -1,35 +1,24 @@
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useUserProfile } from '@/src/hooks/useUserProfile';
+import { useRouter } from 'expo-router';
 import { useProfileTheme } from './UserProfile.styles';
 import ProfileHeader from './components/ProfileHeader';
 import UserStats from './components/UserStats';
 import CategoryList from './components/CategoryList';
 import PlantsList from './components/PlantsList';
+import { Category, Plant, UserProfileData } from '@/src/types-dtos/user.types';
 
-export default function UserProfile() {
+type Props = {
+  user: UserProfileData;
+  categories: Category[];
+  plants: Plant[];
+};
+
+export default function UserProfile({ user, categories, plants }: Props) {
   const insets = useSafeAreaInsets();
-  const state = useUserProfile();
   const { styles } = useProfileTheme();
-
-  if (state.status === 'loading') {
-    return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
-  if (state.status === 'error') {
-    return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <Text>{state.message}</Text>
-      </View>
-    );
-  }
-
-  const { user, categories, plants } = state;
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -40,7 +29,12 @@ export default function UserProfile() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 16 }}
       >
-        <ProfileHeader user={user} topInset={insets.top} />
+        <ProfileHeader
+          user={user}
+          topInset={insets.top}
+          onEditPress={() => router.push('/editProfile')}
+        />
+
         <UserStats stats={user.stats} />
         <CategoryList categories={categories} />
         <PlantsList plants={plants} />

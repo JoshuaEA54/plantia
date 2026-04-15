@@ -1,9 +1,7 @@
 import {
-  ApiCategory,
   ApiPlant,
   ApiUser,
   ApiUserPlant,
-  Category,
   Plant,
   UserProfileData,
 } from '@/src/types-dtos/user.types';
@@ -18,16 +16,8 @@ export function mapUser(user: ApiUser): UserProfileData {
     avatarUrl: user.photoURL,
     stats: {
       plants: user.stats?.plantsCount ?? 0,
-      friends: 0,
       streak: user.stats?.streakDays ?? 0,
     },
-  };
-}
-
-export function mapCategory(category: ApiCategory): Category {
-  return {
-    iconName: category.iconName,
-    name: category.name,
   };
 }
 
@@ -38,6 +28,7 @@ export function mapPlant(userPlant: ApiUserPlant, plant: ApiPlant): Plant {
 
   return {
     id: userPlant.id,
+    plantId: plant.id,
     name: plant.name,
     status: statusMap[userPlant.status] ?? '🌿 En cuidado',
     image: userPlant.photoUrl,

@@ -174,6 +174,25 @@ class ApiCollectionResponse(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Update DTOs
+# ---------------------------------------------------------------------------
+
+
+class UserUpdateDTO(BaseModel):
+    fullName: str | None = None
+    username: str | None = None
+    bio: str | None = None
+    birthdate: str | None = None
+
+
+class PlantUpdateDTO(BaseModel):
+    name: str | None = None
+    family: str | None = None
+    habitat: str | None = None
+    description: str | None = None
+
+
+# ---------------------------------------------------------------------------
 # Auth
 # ---------------------------------------------------------------------------
 

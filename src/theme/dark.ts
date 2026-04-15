@@ -10,4 +10,9 @@ export const darkColors: ThemeColors = {
   textSecondary: '#a5c7aa',
   textMuted: '#5a7a5e',
   border: 'rgba(76,175,110,0.15)',
+  error: '#ef5350',
+  success: '#4caf6e',
+  warning: '#ffb300',
+  inputBackground: '#1e2d22',
+  disabled: '#2a3d2e',
 };
