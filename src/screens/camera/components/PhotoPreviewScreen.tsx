@@ -12,9 +12,19 @@ type Props = {
 export default function PhotoPreviewScreen({ photo, onBack }: Props) {
   const insets = useSafeAreaInsets();
 
+  const imageSource = photo.base64
+    ? { uri: `data:image/jpeg;base64,${photo.base64}` }
+    : { uri: photo.uri };
+
   return (
     <View style={styles.container}>
-      <Image source={{ uri: photo.uri }} style={styles.photo} resizeMode="contain" />
+      <Image
+        source={imageSource}
+        style={styles.photo}
+        resizeMode="contain"
+        onLoad={() => console.log('[PhotoPreview] imagen cargada OK, uri:', photo.uri)}
+        onError={(e) => console.warn('[PhotoPreview] error al cargar imagen:', e.nativeEvent.error, 'uri:', photo.uri)}
+      />
 
       <View style={[styles.topBar, { paddingTop: insets.top + 8 }]}>
         <TouchableOpacity style={styles.closeButton} onPress={onBack} activeOpacity={0.7}>
