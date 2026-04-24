@@ -206,3 +206,21 @@ class GoogleAuthRequest(BaseModel):
 
 class GoogleAuthResponse(BaseModel):
     userId: str
+
+
+# ---------------------------------------------------------------------------
+# Plant identification
+# ---------------------------------------------------------------------------
+
+
+class PlantSuggestion(BaseModel):
+    scientificName: str
+    commonName: str | None
+    confidence: int
+    family: str | None
+    imageUrl: str | None
+
+
+class IdentifyResponse(BaseModel):
+    bestMatch: str
+    results: list[PlantSuggestion]
