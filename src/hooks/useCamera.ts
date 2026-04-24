@@ -18,9 +18,11 @@ interface UseCameraReturn {
   isPermissionGranted: boolean;
   isPermanentlyDenied: boolean;
   isLoadingPermissions: boolean;
+  isCameraReady: boolean;
   facing: CameraType;
   flashMode: FlashMode;
   requestPermissions: () => Promise<void>;
+  handleCameraReady: () => void;
   takePhoto: (options?: CaptureOptions) => Promise<PhotoResult | null>;
   toggleFacing: () => void;
   toggleFlash: () => void;
@@ -40,9 +42,12 @@ export function useCamera(options: UseCameraOptions = {}): UseCameraReturn {
   useEffect(() => { onBackRef.current = onBack; }, [onBack]);
 
   const cameraRef = useRef<CameraView>(null);
+  const isCameraReadyRef = useRef(false);
+  const isSwitchingRef = useRef(false);
 
   const [permissions, setPermissions] = useState<AppPermissions | null>(null);
   const [isLoadingPermissions, setIsLoadingPermissions] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState(false);
   const [facing, setFacing] = useState<CameraType>('back');
   const [flashMode, setFlashMode] = useState<FlashMode>('off');
   const [lastPhoto, setLastPhoto] = useState<PhotoResult | null>(null);
@@ -97,7 +102,14 @@ export function useCamera(options: UseCameraOptions = {}): UseCameraReturn {
     }
   }, [requestOnMount]);
 
+  const handleCameraReady = useCallback(() => {
+    isCameraReadyRef.current = true;
+    isSwitchingRef.current = false;
+    setIsCameraReady(true);
+  }, []);
+
   const takePhoto = useCallback(async (options: CaptureOptions = {}): Promise<PhotoResult | null> => {
+    if (!isCameraReadyRef.current) return null;
     setError(null);
     if (cameraRef.current === null) {
       throw new Error('No se ha detectado ninguna cámara');
@@ -132,6 +144,10 @@ export function useCamera(options: UseCameraOptions = {}): UseCameraReturn {
   }, []);
 
   const toggleFacing = useCallback(() => {
+    if (isSwitchingRef.current) return;
+    isSwitchingRef.current = true;
+    isCameraReadyRef.current = false;
+    setIsCameraReady(false);
     setFacing((prev) => CameraService.toggleFacing(prev));
   }, []);
 
@@ -154,9 +170,11 @@ export function useCamera(options: UseCameraOptions = {}): UseCameraReturn {
     isPermissionGranted,
     isPermanentlyDenied,
     isLoadingPermissions,
+    isCameraReady,
     facing,
     flashMode,
     requestPermissions,
+    handleCameraReady,
     takePhoto,
     toggleFacing,
     toggleFlash,

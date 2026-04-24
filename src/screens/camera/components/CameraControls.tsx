@@ -12,6 +12,7 @@ const FLASH_ICONS: Record<FlashMode, keyof typeof Ionicons.glyphMap> = {
 
 type Props = {
   flashMode: FlashMode;
+  isCameraReady: boolean;
   onBack: () => void;
   onToggleFlash: () => void;
   onToggleFacing: () => void;
@@ -21,6 +22,7 @@ type Props = {
 
 export default function CameraControls({
   flashMode,
+  isCameraReady,
   onBack,
   onToggleFlash,
   onToggleFacing,
@@ -55,8 +57,8 @@ export default function CameraControls({
         </View>
 
         <View style={styles.bottomCell}>
-          <TouchableOpacity style={styles.shutterButton} onPress={onShutter} activeOpacity={0.8}>
-            <View style={styles.shutterInner} />
+          <TouchableOpacity style={styles.shutterButton} onPress={onShutter} activeOpacity={0.8} disabled={!isCameraReady}>
+            <View style={[styles.shutterInner, !isCameraReady && { opacity: 0.4 }]} />
           </TouchableOpacity>
         </View>
 

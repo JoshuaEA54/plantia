@@ -16,8 +16,10 @@ export default function CameraScreen({ onBack }: Props) {
     permissions,
     isPermissionGranted,
     isLoadingPermissions,
+    isCameraReady,
     facing,
     flashMode,
+    handleCameraReady,
     toggleFacing,
     toggleFlash,
     takePhoto,
@@ -46,11 +48,13 @@ export default function CameraScreen({ onBack }: Props) {
         style={styles.cameraView}
         facing={facing}
         flash={flashMode}
+        onCameraReady={handleCameraReady}
       />
 
       {!previewPhoto && (
         <CameraControls
           flashMode={flashMode}
+          isCameraReady={isCameraReady}
           onBack={onBack}
           onToggleFlash={toggleFlash}
           onToggleFacing={toggleFacing}
