@@ -11,13 +11,17 @@ from .models import (
     PlantLikeModel,
     PlantModel,
     PlantOfDayModel,
+    PlantUpdateDTO,
     ReminderModel,
     UserAchievementModel,
     UserModel,
     UserPlantModel,
     UserProfileResponse,
+    UserUpdateDTO,
+    GoogleAuthRequest,
+    GoogleAuthResponse,
 )
-from .services import get_collection, get_document
+from .services import get_collection, get_document, update_document, find_or_create_user_by_google
 
 router = APIRouter()
 
@@ -35,6 +39,12 @@ def healthcheck() -> dict[str, str]:
 @router.get("/api/users/{user_id}", response_model=UserModel)
 def read_user(user_id: str) -> dict:
     return get_document("users", user_id)
+
+
+@router.put("/api/users/{user_id}", response_model=UserModel)
+def update_user(user_id: str, body: UserUpdateDTO) -> dict:
+    data = {k: v for k, v in body.model_dump().items() if v is not None}
+    return update_document("users", user_id, data)
 
 
 @router.get("/api/users/{user_id}/profile", response_model=UserProfileResponse)
@@ -64,6 +74,12 @@ def read_user_profile(user_id: str) -> dict:
 def read_plant_detail(plant_id: str) -> dict:
     plant = get_document("plants", plant_id)
     return {"plant": plant, "userPlant": None}
+
+
+@router.put("/api/plants/{plant_id}", response_model=PlantModel)
+def update_plant(plant_id: str, body: PlantUpdateDTO) -> dict:
+    data = {k: v for k, v in body.model_dump().items() if v is not None}
+    return update_document("plants", plant_id, data)
 
 
 @router.get("/api/users/{user_id}/plants", response_model=list[UserPlantModel])
@@ -159,3 +175,19 @@ def read_collection(collection_name: str) -> dict:
         "count": len(items),
         "items": items,
     }
+
+
+# ---------------------------------------------------------------------------
+# Auth
+# ---------------------------------------------------------------------------
+
+
+@router.post("/api/auth/google", response_model=GoogleAuthResponse)
+def google_auth(body: GoogleAuthRequest) -> dict:
+    user_id = find_or_create_user_by_google(
+        google_id=body.googleId,
+        email=body.email,
+        full_name=body.fullName,
+        photo_url=body.photoURL,
+    )
+    return {"userId": user_id}

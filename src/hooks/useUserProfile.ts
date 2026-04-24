@@ -1,48 +1,85 @@
-import { Category, Plant, UserProfileData } from '@/src/types-dtos/user.types';
+import { useCallback, useState } from 'react';
+import { useAuthContext } from '@/src/context/AuthContext';
+import { mapPlant, mapUser } from '@/src/mappers/user.mapper';
+import { ApiError } from '@/src/services/api';
+import {
+  fetchPlantDetail,
+  fetchUserPlants,
+  fetchUserProfile,
+} from '@/src/services/userProfile.service';
+import {
+  ApiUser,
+  Category,
+  Plant,
+  UserProfileData,
+} from '@/src/types-dtos/user.types';
+import { AsyncState } from '@/src/types-dtos/async-state';
 
-const AVATAR_URL = 'https://www.figma.com/api/mcp/asset/aec0292c-50e5-4965-b885-81433650ab69';
-const PLANT_MONSTERA = 'https://www.figma.com/api/mcp/asset/043082ea-96e1-4980-87e2-b3e22679784c';
-const PLANT_CACTUS = 'https://www.figma.com/api/mcp/asset/d20138ac-cf0a-4ceb-a394-04047df0b78a';
-const PLANT_ORQUIDEA = 'https://www.figma.com/api/mcp/asset/0f382101-9c91-4eb4-aef9-71128c73cab5';
-const PLANT_HELECHO = 'https://www.figma.com/api/mcp/asset/6346626e-946a-4b84-9674-c8fc64a8c5ae';
-const PLANT_ESPATIFILO = 'https://www.figma.com/api/mcp/asset/595dbb96-ffe4-4b83-ba5c-422560b6103a';
-const PLANT_POTHOS = 'https://www.figma.com/api/mcp/asset/aec0292c-50e5-4965-b885-81433650ab69';
+export type ProfileState = AsyncState<{
+  user: UserProfileData;
+  categories: Category[];
+  plants: Plant[];
+  rawUser: ApiUser;
+}>;
 
-const USER: UserProfileData = {
-  name: 'Sofía Martínez',
-  handle: '@sofia.verde',
-  bio: 'Amante de las plantas 🌿 Coleccionando verde desde 2019. Identifico plantas con IA cada día ✨',
-  birthdate: '12 de marzo, 1997',
-  avatarUrl: AVATAR_URL,
-  stats: {
-    plants: 47,
-    friends: 128,
-    streak: 21,
-  },
-};
+export function useUserProfile(): { state: ProfileState; refetch: () => void } {
+  const { userId } = useAuthContext();
+  const [state, setState] = useState<ProfileState>({ status: 'loading' });
 
-const CATEGORIES: Category[] = [
-  { emoji: '🌵', name: 'Cactus' },
-  { emoji: '🌸', name: 'Flores' },
-  { emoji: '🌿', name: 'Tropicale' },
-  { emoji: '🍃', name: 'Suculentas' },
-  { emoji: '🌳', name: 'Árboles' },
-  { emoji: '🪴', name: 'Interior' },
-];
+  const load = useCallback(() => {
+    if (!userId) {
+      setState({ status: 'error', message: 'No has iniciado sesión' });
+      return;
+    }
+    let cancelled = false;
 
-const PLANTS: Plant[] = [
-  { id: 1, name: 'Monstera Deliciosa', status: '🌱 Saludable', image: PLANT_MONSTERA },
-  { id: 2, name: 'Cactus Saguaro', status: '🌱 Saludable', image: PLANT_CACTUS },
-  { id: 3, name: 'Orquídea Phalaenopsis', status: '🌱 Saludable', image: PLANT_ORQUIDEA },
-  { id: 4, name: 'Helecho Boston', status: '🌱 Saludable', image: PLANT_HELECHO },
-  { id: 5, name: 'Espatifilo', status: '🌱 Saludable', image: PLANT_ESPATIFILO },
-  { id: 6, name: 'Pothos Dorado', status: '🌱 Saludable', image: PLANT_POTHOS },
-];
+    async function doFetch() {
+      try {
+        const [profile, userPlants] = await Promise.all([
+          fetchUserProfile(userId!),
+          fetchUserPlants(userId!),
+        ]);
 
-export function useUserProfile() {
-  return {
-    user: USER,
-    categories: CATEGORIES,
-    plants: PLANTS,
-  };
+        const plantDetails = await Promise.all(
+          userPlants.map((up) => fetchPlantDetail(up.plantId)),
+        );
+
+        if (cancelled) return;
+
+        const categoryNameById = new Map(
+          profile.categories.map((category) => [category.id, category.name]),
+        );
+        const userCategoryIds = new Set(
+          plantDetails
+            .map((detail) => detail.plant.categoryId)
+            .filter((categoryId): categoryId is string => Boolean(categoryId)),
+        );
+        const categories = [...userCategoryIds]
+          .map((categoryId) => categoryNameById.get(categoryId))
+          .filter((name): name is string => Boolean(name))
+          .map((name) => ({ name }));
+
+        setState({
+          status: 'success',
+          user: mapUser(profile.user),
+          categories,
+          plants: userPlants.map((up, i) => mapPlant(up, plantDetails[i].plant)),
+          rawUser: profile.user,
+        });
+      } catch (err) {
+        if (cancelled) return;
+        setState({
+          status: 'error',
+          message: err instanceof ApiError ? err.message : 'Error de conexión',
+        });
+      }
+    }
+
+    doFetch();
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
+  return { state, refetch: load };
 }

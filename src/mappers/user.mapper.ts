@@ -1,0 +1,36 @@
+import {
+  ApiPlant,
+  ApiUser,
+  ApiUserPlant,
+  Plant,
+  UserProfileData,
+} from '@/src/types-dtos/user.types';
+import { formatBirthdate } from '@/src/utils/date';
+
+export function mapUser(user: ApiUser): UserProfileData {
+  return {
+    name: user.fullName,
+    handle: user.username,
+    bio: user.bio,
+    birthdate: formatBirthdate(user.birthdate),
+    avatarUrl: user.photoURL,
+    stats: {
+      plants: user.stats?.plantsCount ?? 0,
+      streak: user.stats?.streakDays ?? 0,
+    },
+  };
+}
+
+export function mapPlant(userPlant: ApiUserPlant, plant: ApiPlant): Plant {
+  const statusMap: Record<string, string> = {
+    healthy: '🌱 Saludable',
+  };
+
+  return {
+    id: userPlant.id,
+    plantId: plant.id,
+    name: plant.name,
+    status: statusMap[userPlant.status] ?? '🌿 En cuidado',
+    image: userPlant.photoUrl,
+  };
+}

@@ -1,6 +1,7 @@
 from typing import Any
 
 from fastapi import HTTPException
+from google.cloud.firestore_v1.base_query import FieldFilter
 
 from .firebase import get_firestore_client
 
@@ -52,9 +53,56 @@ def get_collection(
     query = db.collection(collection_name)
 
     for field_name, operator, value in filters or []:
-        query = query.where(field_name, operator, value)
+        query = query.where(filter=FieldFilter(field_name, operator, value))
 
     if order_by:
         query = query.order_by(order_by)
 
     return [_serialize_document(document) for document in query.stream()]
+
+
+def update_document(collection_name: str, document_id: str, data: dict) -> dict[str, Any]:
+    db = get_firestore_client()
+    ref = db.collection(collection_name).document(document_id)
+    if not ref.get().exists:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No se encontró el documento '{document_id}' en '{collection_name}'.",
+        )
+    ref.update(data)
+    return _serialize_document(ref.get())
+
+
+def find_or_create_user_by_google(
+    google_id: str,
+    email: str,
+    full_name: str,
+    photo_url: str,
+) -> str:
+    from datetime import datetime, timezone
+
+    db = get_firestore_client()
+    users_ref = db.collection("users")
+
+    results = list(
+        users_ref.where(filter=FieldFilter("email", "==", email)).limit(1).stream()
+    )
+    if results:
+        return results[0].id
+
+    now = datetime.now(timezone.utc).isoformat()
+    username = email.split("@")[0]
+    _, new_doc = users_ref.add({
+        "fullName": full_name,
+        "username": username,
+        "email": email,
+        "bio": "",
+        "birthdate": "",
+        "photoURL": photo_url,
+        "stats": {"plantsCount": 0, "streakDays": 0},
+        "acceptedTerms": True,
+        "googleId": google_id,
+        "createdAt": now,
+        "updatedAt": now,
+    })
+    return new_doc.id

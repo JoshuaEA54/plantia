@@ -22,7 +22,6 @@ export default function CategoryList({ categories }: CategoryListProps) {
       >
         {categories.map((cat) => (
           <TouchableOpacity key={cat.name} style={styles.categoryChip}>
-            <Text style={styles.categoryEmoji}>{cat.emoji}</Text>
             <Text style={styles.categoryName}>{cat.name}</Text>
           </TouchableOpacity>
         ))}

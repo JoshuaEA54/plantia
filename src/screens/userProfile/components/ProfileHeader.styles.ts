@@ -16,7 +16,7 @@ const createProfileHeaderStyle = (theme: AppTheme) => {
       width: 34,
       height: 34,
       borderRadius: 17,
-      backgroundColor: 'rgba(255,255,255,0.18)',
+      backgroundColor: theme.colors.white,
       alignItems: 'center',
       justifyContent: 'center',
     },
