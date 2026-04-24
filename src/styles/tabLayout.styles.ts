@@ -3,6 +3,9 @@ import { AppTheme, createThemedStyles } from '@/src/theme/desingSystem';
 
 const createTabLayoutStyle = (theme: AppTheme) =>
   StyleSheet.create({
+    root: {
+      flex: 1,
+    },
     tabBar: {
       backgroundColor: theme.colors.white,
       borderTopColor: theme.colors.border,
