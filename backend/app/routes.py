@@ -1,5 +1,7 @@
-from fastapi import APIRouter
+import httpx
+from fastapi import APIRouter, HTTPException, UploadFile, File
 
+from .config import get_settings
 from .models import (
     AchievementModel,
     ApiCollectionResponse,
@@ -7,10 +9,12 @@ from .models import (
     CategoryModel,
     ExploreFeaturedModel,
     ExploreFilterModel,
+    IdentifyResponse,
     PlantDetailResponse,
     PlantLikeModel,
     PlantModel,
     PlantOfDayModel,
+    PlantSuggestion,
     PlantUpdateDTO,
     ReminderModel,
     UserAchievementModel,
@@ -191,3 +195,59 @@ def google_auth(body: GoogleAuthRequest) -> dict:
         photo_url=body.photoURL,
     )
     return {"userId": user_id}
+
+
+# ---------------------------------------------------------------------------
+# Plant identification
+# ---------------------------------------------------------------------------
+
+PLANTNET_URL = "https://my-api.plantnet.org/v2/identify/all"
+
+
+@router.post("/api/plants/identify", response_model=IdentifyResponse)
+async def identify_plant(image: UploadFile = File(...)) -> dict:
+    settings = get_settings()
+    if not settings.plantnet_api_key:
+        raise HTTPException(status_code=503, detail="Servicio de identificación no configurado")
+
+    image_bytes = await image.read()
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        try:
+            response = await client.post(
+                PLANTNET_URL,
+                params={
+                    "api-key": settings.plantnet_api_key,
+                    "lang": "es",
+                    "nb-results": 5,
+                    "include-related-images": "true",
+                },
+                files={"images": (image.filename or "plant.jpg", image_bytes, "image/jpeg")},
+            )
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
+            raise HTTPException(status_code=e.response.status_code, detail="Error al identificar la planta")
+        except httpx.RequestError:
+            raise HTTPException(status_code=502, detail="No se pudo conectar con el servicio de identificación")
+
+    raw = response.json()
+    results: list[PlantSuggestion] = []
+
+    for item in raw.get("results", []):
+        species = item.get("species", {})
+        common_names: list[str] = species.get("commonNames", [])
+        similar_images: list[dict] = item.get("images", [])
+        image_url: str | None = None
+        if similar_images:
+            image_url = similar_images[0].get("url", {}).get("m")
+
+        results.append(PlantSuggestion(
+            scientificName=species.get("scientificNameWithoutAuthor", ""),
+            commonName=common_names[0] if common_names else None,
+            confidence=round(item.get("score", 0) * 100),
+            family=species.get("family", {}).get("scientificNameWithoutAuthor"),
+            imageUrl=image_url,
+        ))
+
+    best_match: str = raw.get("bestMatch", results[0].scientificName if results else "")
+    return {"bestMatch": best_match, "results": results}
