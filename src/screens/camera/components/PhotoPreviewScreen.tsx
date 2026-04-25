@@ -7,9 +7,10 @@ import type { PhotoResult } from '@/src/types-dtos/camera.types';
 type Props = {
   photo: PhotoResult;
   onBack: () => void;
+  onIdentify: () => void;
 };
 
-export default function PhotoPreviewScreen({ photo, onBack }: Props) {
+export default function PhotoPreviewScreen({ photo, onBack, onIdentify }: Props) {
   const insets = useSafeAreaInsets();
 
   const imageSource = photo.base64
@@ -33,7 +34,7 @@ export default function PhotoPreviewScreen({ photo, onBack }: Props) {
       </View>
 
       <View style={[styles.bottomBar, { paddingBottom: insets.bottom + 24 }]}>
-        <TouchableOpacity style={styles.sendButton} disabled>
+        <TouchableOpacity style={styles.sendButton} onPress={onIdentify} activeOpacity={0.7}>
           <Ionicons name="arrow-forward" size={28} color="white" />
         </TouchableOpacity>
       </View>

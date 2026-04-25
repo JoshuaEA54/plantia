@@ -1,7 +1,5 @@
-import httpx
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, UploadFile, File
 
-from .config import get_settings
 from .models import (
     AchievementModel,
     ApiCollectionResponse,
@@ -14,9 +12,10 @@ from .models import (
     PlantLikeModel,
     PlantModel,
     PlantOfDayModel,
-    PlantSuggestion,
     PlantUpdateDTO,
     ReminderModel,
+    SaveIdentifiedPlantDTO,
+    SaveIdentifiedPlantResponse,
     UserAchievementModel,
     UserModel,
     UserPlantModel,
@@ -25,7 +24,14 @@ from .models import (
     GoogleAuthRequest,
     GoogleAuthResponse,
 )
-from .services import get_collection, get_document, update_document, find_or_create_user_by_google
+from .services import (
+    get_collection,
+    get_document,
+    update_document,
+    find_or_create_user_by_google,
+    identify_plant_from_image,
+    save_identified_plant,
+)
 
 router = APIRouter()
 
@@ -201,53 +207,24 @@ def google_auth(body: GoogleAuthRequest) -> dict:
 # Plant identification
 # ---------------------------------------------------------------------------
 
-PLANTNET_URL = "https://my-api.plantnet.org/v2/identify/all"
-
 
 @router.post("/api/plants/identify", response_model=IdentifyResponse)
 async def identify_plant(image: UploadFile = File(...)) -> dict:
-    settings = get_settings()
-    if not settings.plantnet_api_key:
-        raise HTTPException(status_code=503, detail="Servicio de identificación no configurado")
-
     image_bytes = await image.read()
+    return await identify_plant_from_image(image_bytes, image.filename or "plant.jpg")
 
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        try:
-            response = await client.post(
-                PLANTNET_URL,
-                params={
-                    "api-key": settings.plantnet_api_key,
-                    "lang": "es",
-                    "nb-results": 5,
-                    "include-related-images": "true",
-                },
-                files={"images": (image.filename or "plant.jpg", image_bytes, "image/jpeg")},
-            )
-            response.raise_for_status()
-        except httpx.HTTPStatusError as e:
-            raise HTTPException(status_code=e.response.status_code, detail="Error al identificar la planta")
-        except httpx.RequestError:
-            raise HTTPException(status_code=502, detail="No se pudo conectar con el servicio de identificación")
 
-    raw = response.json()
-    results: list[PlantSuggestion] = []
+# ---------------------------------------------------------------------------
+# Save identified plant to user collection
+# ---------------------------------------------------------------------------
 
-    for item in raw.get("results", []):
-        species = item.get("species", {})
-        common_names: list[str] = species.get("commonNames", [])
-        similar_images: list[dict] = item.get("images", [])
-        image_url: str | None = None
-        if similar_images:
-            image_url = similar_images[0].get("url", {}).get("m")
 
-        results.append(PlantSuggestion(
-            scientificName=species.get("scientificNameWithoutAuthor", ""),
-            commonName=common_names[0] if common_names else None,
-            confidence=round(item.get("score", 0) * 100),
-            family=species.get("family", {}).get("scientificNameWithoutAuthor"),
-            imageUrl=image_url,
-        ))
-
-    best_match: str = raw.get("bestMatch", results[0].scientificName if results else "")
-    return {"bestMatch": best_match, "results": results}
+@router.post("/api/users/{user_id}/plants/identified", response_model=SaveIdentifiedPlantResponse)
+def save_identified_plant_route(user_id: str, body: SaveIdentifiedPlantDTO) -> dict:
+    return save_identified_plant(
+        user_id=user_id,
+        scientific_name=body.scientificName,
+        common_name=body.commonName,
+        family=body.family,
+        image_url=body.imageUrl,
+    )
