@@ -43,6 +43,5 @@ export const styles = StyleSheet.create({
     backgroundColor: '#4CAF50',
     alignItems: 'center',
     justifyContent: 'center',
-    opacity: 0.4,
   },
 });

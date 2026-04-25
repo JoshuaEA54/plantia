@@ -20,6 +20,7 @@ class Settings:
         ] or ["*"]
 
         self.plantnet_api_key = os.getenv("PLANTNET_API_KEY", "")
+        self.plantnet_url = "https://my-api.plantnet.org/v2/identify/all"
 
         self.firebase_service_account_json = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
 

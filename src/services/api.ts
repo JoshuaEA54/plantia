@@ -17,7 +17,14 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
   });
   if (!response.ok) {
     const text = await response.text();
-    throw new ApiError(response.status, text);
+    let message = text;
+    try {
+      const json = JSON.parse(text);
+      message = json.detail ?? json.message ?? text;
+    } catch {
+      // keep raw text if not valid JSON
+    }
+    throw new ApiError(response.status, message);
   }
   return response.json() as Promise<T>;
 }

@@ -224,3 +224,16 @@ class PlantSuggestion(BaseModel):
 class IdentifyResponse(BaseModel):
     bestMatch: str
     results: list[PlantSuggestion]
+
+
+class SaveIdentifiedPlantDTO(BaseModel):
+    scientificName: str
+    commonName: str | None = None
+    family: str | None = None
+    imageUrl: str | None = None
+    confidence: int
+
+
+class SaveIdentifiedPlantResponse(BaseModel):
+    userPlantId: str
+    plantId: str
