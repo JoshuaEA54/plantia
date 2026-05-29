@@ -1,5 +1,4 @@
 import { ScrollView, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useProfileTheme } from './UserProfile.styles';
@@ -22,8 +21,6 @@ export default function UserProfile({ user, categories, plants }: Props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
-
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}

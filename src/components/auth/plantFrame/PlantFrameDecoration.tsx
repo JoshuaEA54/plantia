@@ -2,6 +2,7 @@ import { ReactNode, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '@/src/theme/desingSystem';
+import AppStatusBar from '@/src/components/common/AppStatusBar';
 import { PLANT_SIDES } from './plantFrame.config';
 import { getPlantFrameLayout } from './plantFrame.layout';
 import { PlantFrameMode } from './plantFrame.types';
@@ -37,6 +38,7 @@ export default function PlantFrameDecoration({
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <AppStatusBar backgroundColor={theme.colors.background} />
       {PLANT_SIDES.map((side) => (
         <PlantSideImage
           key={side}
