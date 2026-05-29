@@ -1,18 +1,19 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppTheme } from '@/src/theme/desingSystem';
-import { useAuthContext } from '@/src/context/AuthContext';
+import { useAuth } from '@/src/hooks/useAuth';
 
 export default function SettingsTab() {
   const theme = useAppTheme();
-  const { setUserId } = useAuthContext();
+  const { logout, isLoading } = useAuth();
 
-  return (
+    return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text style={{ color: theme.colors.textPrimary }}>Ajustes</Text>
 
       <TouchableOpacity
-        onPress={() => setUserId(null)}
+        onPress={logout}
+        disabled={isLoading}
         style={[styles.logoutButton, { borderColor: theme.colors.error }]}
       >
         <Ionicons name="log-out-outline" size={20} color={theme.colors.error} />

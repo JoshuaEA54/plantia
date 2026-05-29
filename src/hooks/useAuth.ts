@@ -7,15 +7,15 @@ import { useAuthContext } from "@/src/context/AuthContext";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:8000";
 
+GoogleSignin.configure({
+  scopes: ["profile", "email"],
+  webClientId:
+    "716068876990-v61vffcosd27itak3jbasvgfuo5ef04i.apps.googleusercontent.com",
+});
+
 export function useAuth() {
   const { setUserId } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
-
-  GoogleSignin.configure({
-    scopes: ["profile", "email"],
-    webClientId:
-      "716068876990-v61vffcosd27itak3jbasvgfuo5ef04i.apps.googleusercontent.com",
-  });
 
   const authGoogle = async () => {
     setIsLoading(true);
@@ -52,5 +52,24 @@ export function useAuth() {
     }
   };
 
-  return { authGoogle, isLoading };
+  const logout = async () => {
+    setIsLoading(true);
+    try {
+      await GoogleSignin.signOut();
+    } catch (e) {
+      console.warn("GoogleSignin.signOut falló:", e);
+    }
+    try {
+      await GoogleSignin.revokeAccess();
+    } catch (e: unknown) {
+      const code = (e as { code?: string })?.code;
+      if (code !== "SIGN_IN_REQUIRED") {
+        console.warn("GoogleSignin.revokeAccess falló:", e);
+      }
+    }
+    await setUserId(null);
+    setIsLoading(false);
+  };
+
+  return { authGoogle, logout, isLoading };
 }
