@@ -1,15 +1,24 @@
 import { View } from 'react-native';
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Animated from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FloatingCameraButton from '@/src/screens/camera/components/FloatingCameraButton';
 import CameraScreen from '@/src/screens/camera/CameraScreen';
 import { useTabLayoutTheme } from '@/src/styles/tabLayout.styles';
+import AppStatusBar from '@/src/components/common/AppStatusBar';
 import { useTabCamera } from '@/src/hooks/useTabCamera';
 import { CAMERA_BUTTON_SIZE } from '@/src/constants/camera';
+import { TAB_BAR_HEIGHT } from '@/src/constants/dimensions';
 
 export default function TabLayout() {
   const { theme, styles } = useTabLayoutTheme();
+  const insets = useSafeAreaInsets();
+  const pathname = usePathname();
+  const isProfileTab = pathname.includes('/profile');
+  const statusBarBackground = isProfileTab
+    ? theme.colors.primaryDark
+    : theme.colors.background;
   const {
     isCameraActive,
     cameraKey,
@@ -20,13 +29,18 @@ export default function TabLayout() {
 
   return (
     <View style={styles.root}>
+      <AppStatusBar backgroundColor={statusBarBackground} />
       <Tabs
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: theme.colors.primary,
           tabBarInactiveTintColor: theme.colors.textMuted,
           tabBarLabelStyle: styles.tabBarLabel,
-          tabBarStyle: styles.tabBar,
+          tabBarStyle: {
+            ...styles.tabBar,
+            height: TAB_BAR_HEIGHT + insets.bottom,
+            paddingBottom: insets.bottom + theme.spacing.sm,
+          },
         }}
       >
         <Tabs.Screen
