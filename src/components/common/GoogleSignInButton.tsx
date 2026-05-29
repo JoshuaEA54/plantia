@@ -19,14 +19,33 @@ type Props = {
   disabled?: boolean;
 };
 
+/** Colores oficiales de Google Sign-In (branding guidelines). */
+const GOOGLE_BUTTON_THEME = {
+  light: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#747775',
+    textColor: '#1F1F1F',
+  },
+  dark: {
+    backgroundColor: '#131314',
+    borderColor: '#8E918F',
+    textColor: '#E3E3E3',
+  },
+} as const;
+
 export default function GoogleSignInButton({ onPress, disabled = false }: Props) {
   const theme = useAppTheme();
+  const googleTheme = GOOGLE_BUTTON_THEME[theme.mode];
 
   return (
     <TouchableOpacity
       style={[
         styles.button,
-        { borderRadius: theme.radius.full, borderColor: theme.colors.border },
+        {
+          borderRadius: theme.radius.full,
+          backgroundColor: googleTheme.backgroundColor,
+          borderColor: googleTheme.borderColor,
+        },
         disabled && styles.disabled,
       ]}
       onPress={onPress}
@@ -34,11 +53,20 @@ export default function GoogleSignInButton({ onPress, disabled = false }: Props)
       activeOpacity={0.85}
     >
       {disabled ? (
-        <ActivityIndicator size="small" color={theme.colors.textMuted} />
+        <ActivityIndicator size="small" color={googleTheme.textColor} />
       ) : (
         <View style={styles.inner}>
           <GoogleLogo size={20} />
-          <Text style={[styles.label, { fontFamily: theme.fontFamily.semiBold, fontSize: theme.fontSize.body, color: theme.colors.textPrimary }]}>
+          <Text
+            style={[
+              styles.label,
+              {
+                fontFamily: theme.fontFamily.semiBold,
+                fontSize: theme.fontSize.body,
+                color: googleTheme.textColor,
+              },
+            ]}
+          >
             Continuar con Google
           </Text>
         </View>
@@ -52,10 +80,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 52,
     borderWidth: 1,
-    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 12,
   },
   inner: {
     flexDirection: 'row',

@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import { useColorScheme } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
@@ -17,17 +17,15 @@ function RootNavigator() {
   const [showSplash, setShowSplash] = useState(true);
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
+  const handleSplashComplete = useCallback(() => setShowSplash(false), []);
 
-  // Ocultar splash nativa en cuanto el JS carga — el componente React toma el relevo
-  useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
-
+  // Tras la primera transición, Fast Refresh (R) conserva showSplash=false y salta el splash.
   if (showSplash) {
     return (
       <AnimatedSplash
+        key="app-splash"
         isReady={!isLoading}
-        onComplete={() => setShowSplash(false)}
+        onComplete={handleSplashComplete}
       />
     );
   }
@@ -55,13 +53,23 @@ function RootNavigator() {
 }
 
 export default function RootLayout() {
-  useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     Nunito_400Regular,
     Nunito_500Medium,
     Nunito_600SemiBold,
     Nunito_700Bold,
     Nunito_800ExtraBold,
   });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
